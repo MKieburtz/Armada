@@ -9,6 +9,7 @@ import javax.swing.*;
  */
 public class ArmadaWindow extends JFrame
 {
+    private Panel panel;
     public ArmadaWindow()
     {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -16,6 +17,19 @@ public class ArmadaWindow extends JFrame
         setMinimumSize(new Dimension(1000, 600));
         setBackground(Color.BLACK);
         setLocationRelativeTo(null);
+        
+        panel = new Panel();
+        getContentPane().add(panel);
+        
         setVisible(true);
+    }
+    
+    public class Panel extends JPanel
+    {
+        public Panel()
+        {
+            setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            setBackground(Color.BLACK);
+        }
     }
 }
