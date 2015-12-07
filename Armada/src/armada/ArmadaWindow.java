@@ -2,6 +2,8 @@ package armada;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import javax.swing.*;
 
 /**
@@ -10,8 +12,14 @@ import javax.swing.*;
 public class ArmadaWindow extends JFrame
 {
     private Panel panel;
+    private ArrayList<String> imagePaths = new ArrayList<>();
+    private ArrayList<BufferedImage> images = new ArrayList<>();
+    
     public ArmadaWindow()
     {
+        imagePaths.add("Resources/Border.png");
+        imagePaths.add("Resources/Border2.png");
+        
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Armada");
         setMinimumSize(new Dimension(1000, 600));
