@@ -11,6 +11,7 @@ public class Armada
     public Armada()
     {
         resources = new Resources();
+        GameData.initResources(resources);
         window = new ArmadaWindow();
     }
     

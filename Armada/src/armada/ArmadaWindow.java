@@ -20,6 +20,8 @@ public class ArmadaWindow extends JFrame
         imagePaths.add("Resources/Border.png");
         imagePaths.add("Resources/Border2.png");
         
+        images.addAll(GameData.getResources().getImagesForObject(imagePaths));
+
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Armada");
         setMinimumSize(new Dimension(1000, 600));
