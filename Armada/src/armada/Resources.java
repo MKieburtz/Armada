@@ -24,8 +24,7 @@ public class Resources
     public Resources()
     {
         // for HUD
-        imagePaths.add("Resources/Border.png"); //brighter border
-        imagePaths.add("Resources/Border2.png"); // darker but glowier border
+        imagePaths.add("Resources/Border.png");
         
         // load the images
         loadAllImages();

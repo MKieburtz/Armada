@@ -27,7 +27,7 @@ public class Armada
         @Override
         public void run() 
         {
-            
+            window.draw();
             drawingTimer.schedule(new UpdateAndDrawingService(), 500, TimeUnit.MILLISECONDS);
         }
     }

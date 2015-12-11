@@ -16,11 +16,14 @@ public class ArmadaWindow extends JFrame
     private Panel panel;
     private ArrayList<String> imagePaths = new ArrayList<>();
     private ArrayList<BufferedImage> images = new ArrayList<>();
+    private Renderer renderer;
+    private Dimension windowSize;
         
     public ArmadaWindow()
     {
+        renderer = new Renderer();
+        
         imagePaths.add("Resources/Border.png");
-        imagePaths.add("Resources/Border2.png");
         
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
         
@@ -29,6 +32,8 @@ public class ArmadaWindow extends JFrame
         setMinimumSize(new Dimension(1000, 600));
         setBackground(Color.BLACK);
         setLocationRelativeTo(null);
+        
+        windowSize = getSize();
         
         panel = new Panel();
         getContentPane().add(panel);
@@ -57,5 +62,10 @@ public class ArmadaWindow extends JFrame
         {
             return bufferStrategy;
         }
+    }
+    
+    public void draw()
+    {
+        renderer.drawScreen(panel.getDrawingStrategy(), images.get(0), windowSize);
     }
 }
