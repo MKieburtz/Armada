@@ -8,7 +8,15 @@ import java.awt.image.BufferedImage;
  */
 public class Renderer 
 {
-    private final int BORDER_OFFSET = 13;
+    private final boolean isMac;
+    private final int BORDER_OFFSET;
+    
+    public Renderer(boolean isMac)
+    {
+        this.isMac = isMac;
+        BORDER_OFFSET = isMac ? 13 : 6; // because Macs don't have borders on the windows except at the top
+    }
+    
     public void drawScreen(BufferStrategy bufferStrategy, BufferedImage imageToDraw,
             Dimension windowSize)
     {

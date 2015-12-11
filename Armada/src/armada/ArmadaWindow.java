@@ -13,19 +13,20 @@ import javax.swing.*;
  */
 public class ArmadaWindow extends JFrame
 {
-    private Panel panel;
+    private final Panel panel;
     private ArrayList<String> imagePaths = new ArrayList<>();
     private ArrayList<BufferedImage> images = new ArrayList<>();
-    private Renderer renderer;
+    private final Renderer renderer;
     private Dimension windowSize;
         
     public ArmadaWindow()
     {
-        renderer = new Renderer();
+        renderer = new Renderer(System.getProperty("os.name").contains("osx"));
         
         imagePaths.add("Resources/Border.png");
         
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
+        images.add(GameData.getResources().getGeneratedImage(Resources.GeneratedImageIndexes.rotatedBorders));
         
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Armada");
@@ -66,6 +67,6 @@ public class ArmadaWindow extends JFrame
     
     public void draw()
     {
-        renderer.drawScreen(panel.getDrawingStrategy(), images.get(0), windowSize);
+        renderer.drawScreen(panel.getDrawingStrategy(), images.get(1), windowSize);
     }
 }

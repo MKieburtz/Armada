@@ -1,6 +1,7 @@
 package armada;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.*;
 import java.util.*;
 import javax.sound.sampled.*;
@@ -10,16 +11,20 @@ import javax.sound.sampled.*;
  */
 public class Resources 
 {
-    private MediaLoader loader = new MediaLoader();
+    private final MediaLoader loader = new MediaLoader();
 
-    private ArrayList<String> imagePaths = new ArrayList<>();
-    private HashMap<String, BufferedImage> images = new HashMap<>();
+    private final ArrayList<String> imagePaths = new ArrayList<>();
+    private final LinkedHashMap<String, BufferedImage> images = new LinkedHashMap<>();
+    private final HashMap<GeneratedImageIndexes, BufferedImage> generatedImages = new HashMap<>();
+    
+    
+    private final ArrayList<String> soundPaths = new ArrayList<>();
+    private final HashMap<String, Clip> sounds = new HashMap<>();
 
-    private ArrayList<String> soundPaths = new ArrayList<>();
-    private HashMap<String, Clip> sounds = new HashMap<>();
-
-    private ArrayList<FontInfo> fontData = new ArrayList<>();
-    private HashMap<FontInfo, Font> fonts = new HashMap<>();
+    private final ArrayList<FontInfo> fontData = new ArrayList<>();
+    private final HashMap<FontInfo, Font> fonts = new HashMap<>();
+    
+    private final int BORDER_IMAGE_INDEX = 0;
     
     public Resources()
     {
@@ -28,6 +33,38 @@ public class Resources
         
         // load the images
         loadAllImages();
+        
+        // make any generated images
+        createRotatedBorders();
+    }
+    
+    public static enum GeneratedImageIndexes
+    {
+        rotatedBorders
+    }
+    
+    private void createRotatedBorders()
+    {
+        ArrayList<BufferedImage> allImages = new ArrayList<>(images.values());
+        
+        //reversed width and height because it's rotated 90 degrees
+        BufferedImage rotatedBorderImage = new BufferedImage(allImages.get(BORDER_IMAGE_INDEX).getHeight(),
+                allImages.get(BORDER_IMAGE_INDEX).getWidth(), BufferedImage.TYPE_INT_ARGB);
+        
+        Graphics2D g2d = rotatedBorderImage.createGraphics();
+        AffineTransform original = g2d.getTransform();
+        AffineTransform transform = (AffineTransform)original.clone();
+        transform.rotate(Math.toRadians(90), rotatedBorderImage.getWidth() / 2, rotatedBorderImage.getHeight() / 2);
+        g2d.transform(transform);
+        g2d.drawImage(allImages.get(BORDER_IMAGE_INDEX), 0, 0, null);
+        g2d.setTransform(original);
+        
+        generatedImages.put(GeneratedImageIndexes.rotatedBorders, rotatedBorderImage);
+    }
+    
+    public BufferedImage getGeneratedImage(GeneratedImageIndexes generatedIndexes)
+    {
+        return generatedImages.get(generatedIndexes);
     }
     
     public ArrayList<BufferedImage> getImagesForObject(ArrayList<String> paths) 

@@ -7,9 +7,9 @@ import java.util.concurrent.*;
  */
 public class Armada
 {
-    private ArmadaWindow window;
-    private Resources resources;
-    private ScheduledExecutorService drawingTimer;
+    private final ArmadaWindow window;
+    private final Resources resources;
+    private final ScheduledExecutorService drawingTimer;
             
     public Armada()
     {
@@ -19,7 +19,7 @@ public class Armada
         GameData.initResources(resources);
         window = new ArmadaWindow();
         
-        drawingTimer.schedule(new UpdateAndDrawingService(), 500, TimeUnit.MILLISECONDS);
+        drawingTimer.schedule(new UpdateAndDrawingService(), 0, TimeUnit.MILLISECONDS);
     }
     
     class UpdateAndDrawingService implements Runnable
@@ -28,7 +28,7 @@ public class Armada
         public void run() 
         {
             window.draw();
-            drawingTimer.schedule(new UpdateAndDrawingService(), 500, TimeUnit.MILLISECONDS);
+            drawingTimer.schedule(new UpdateAndDrawingService(), 17, TimeUnit.MILLISECONDS);
         }
     }
     
