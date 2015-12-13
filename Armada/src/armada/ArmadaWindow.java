@@ -26,6 +26,7 @@ public class ArmadaWindow extends JFrame
         renderer = new Renderer(System.getProperty("os.name").contains("OS X"));
         imagePaths.add("Resources/SideBorder.png");
         imagePaths.add("Resources/TopBorder.png");
+        imagePaths.add("Resources/InitBorder.png");
         
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
         
@@ -90,6 +91,6 @@ public class ArmadaWindow extends JFrame
     
     public void draw()
     {
-        renderer.drawScreen(panel.getDrawingStrategy(), images.get(0), images.get(1), windowSize);
+        renderer.drawScreen(panel.getDrawingStrategy(), images.get(0), images.get(1), images.get(2), windowSize);
     }
 }

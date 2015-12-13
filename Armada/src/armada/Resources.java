@@ -1,7 +1,8 @@
 package armada;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.*;
 import java.util.*;
 import javax.sound.sampled.*;
@@ -15,6 +16,7 @@ public class Resources
 
     private final ArrayList<String> imagePaths = new ArrayList<>();
     private final LinkedHashMap<String, BufferedImage> images = new LinkedHashMap<>();    
+    private final HashMap<GeneratedImagesType, BufferedImage[]> generatedImages = new HashMap<>();
     
     private final ArrayList<String> soundPaths = new ArrayList<>();
     private final HashMap<String, Clip> sounds = new HashMap<>();
@@ -22,28 +24,72 @@ public class Resources
     private final ArrayList<FontInfo> fontData = new ArrayList<>();
     private final HashMap<FontInfo, Font> fonts = new HashMap<>();
     
-    private final int BORDER_IMAGE_INDEX = 0;
+    private final int TOP_BORDER_INDEX = 1;
+    private final int INIT_BORDER_INDEX = 2;
+    private final int INIT_BORDER_HEIGHT = 1024;
+    private final int INIT_BORDER_WIDTH = 20;
     
     public Resources()
     {
         // for HUD
         imagePaths.add("Resources/SideBorder.png");
         imagePaths.add("Resources/TopBorder.png");
+        imagePaths.add("Resources/InitBorder.png");
         
         // load the images
         loadAllImages();
     }
     
-//    public static enum GeneratedImageIndexes
-//    {
-//        rotatedBorders
-//    }
-//    
-//    public BufferedImage getGeneratedImage(GeneratedImageIndexes generatedIndexes)
-//    {
-//        return generatedImages.get(generatedIndexes);
-//    }
+    public static enum GeneratedImagesType
+    {
+        animatedInitBorder,
+        animatedHoritontalBorder
+    }
     
+    private void generateImages()
+    {
+        // init border first
+        BufferedImage[] initImages = new BufferedImage[40];
+        
+        for (int i = 0; i < initImages.length; i++)
+        {
+            initImages[i] = new BufferedImage(20, 1024, BufferedImage.TYPE_INT_ARGB);
+        }
+        
+        for (int i = 0; i < 20; i++)
+        {
+            Rectangle2D.Double totalArea = new Rectangle2D.Double(0, 0,
+                    images.get(INIT_BORDER_INDEX).getWidth(), images.get(INIT_BORDER_INDEX).getHeight());
+            Rectangle2D.Double clipping;
+            if (i == 0)
+            {
+                clipping = new Rectangle2D.Double(0, 0, INIT_BORDER_WIDTH, 24);
+            }
+            else
+            {
+                clipping = new Rectangle2D.Double(0, 0, INIT_BORDER_WIDTH, 24 + i * 25);
+            }
+            Area clippingArea = new Area(totalArea);
+            clippingArea.subtract(new Area(clipping));
+            
+            Graphics2D g2d = initImages[i].createGraphics();
+            
+            g2d.clip(clippingArea);
+            g2d.drawImage(new ArrayList<>(images.values()).get(INIT_BORDER_INDEX), 0, 0, null);
+            g2d.dispose();
+            generatedImages.put(GeneratedImagesType.animatedInitBorder, initImages);
+            
+            // then generate the top borders
+            
+        }
+    }
+    
+    public BufferedImage[] getGeneratedImagesForObject(GeneratedImagesType type)
+    {
+        return generatedImages.get(type);
+    }
+            
+            
     public ArrayList<BufferedImage> getImagesForObject(ArrayList<String> paths) 
     {
         ArrayList<BufferedImage> imagesToReturn = new ArrayList<>();
