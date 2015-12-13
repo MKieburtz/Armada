@@ -9,15 +9,22 @@ import java.awt.image.BufferedImage;
 public class Renderer 
 {
     private final boolean isMac;
-    private final int BORDER_OFFSET;
+    private final int VERTICAL_BORDER_OFFSET;
+    private final int HORIZONTAL_BORDER_OFFSET_TOP;
+    private final int HORIZONTAL_BORDER_OFFSET_SIDE;
+    private final int HORIZONTAL_BORDER_OFFSET_BOTTOM;
     
     public Renderer(boolean isMac)
     {
+        // because Macs don't have borders on the windows except at the top
         this.isMac = isMac;
-        BORDER_OFFSET = isMac ? 13 : 6; // because Macs don't have borders on the windows except at the top
+        VERTICAL_BORDER_OFFSET = isMac ? 16 : 6; 
+        HORIZONTAL_BORDER_OFFSET_TOP = 6;
+        HORIZONTAL_BORDER_OFFSET_SIDE = -22;
+        HORIZONTAL_BORDER_OFFSET_BOTTOM = 14;
     }
     
-    public void drawScreen(BufferStrategy bufferStrategy, BufferedImage imageToDraw,
+    public void drawScreen(BufferStrategy bufferStrategy, BufferedImage verticalBorder, BufferedImage horizontalBorder,
             Dimension windowSize)
     {
         do 
@@ -27,8 +34,10 @@ public class Renderer
                 Graphics2D g2d = (Graphics2D)bufferStrategy.getDrawGraphics();
                 g2d.setColor(Color.BLACK);
                 g2d.fillRect(0, 0, (int)windowSize.getWidth(), (int)windowSize.getHeight());
-                g2d.drawImage(imageToDraw, -BORDER_OFFSET, 0, null);
-                g2d.drawImage(imageToDraw, windowSize.width - imageToDraw.getWidth() + BORDER_OFFSET, 0, null);
+                g2d.drawImage(verticalBorder, -VERTICAL_BORDER_OFFSET, 0, null);
+                g2d.drawImage(verticalBorder, windowSize.width - verticalBorder.getWidth() + VERTICAL_BORDER_OFFSET, 0, null);
+                g2d.drawImage(horizontalBorder, HORIZONTAL_BORDER_OFFSET_SIDE, HORIZONTAL_BORDER_OFFSET_TOP, null);
+                g2d.drawImage(horizontalBorder, HORIZONTAL_BORDER_OFFSET_SIDE, windowSize.height - HORIZONTAL_BORDER_OFFSET_BOTTOM, null);
                 g2d.dispose();
                 
             } while (bufferStrategy.contentsRestored());

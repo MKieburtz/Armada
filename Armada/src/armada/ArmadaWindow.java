@@ -3,6 +3,8 @@ package armada;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -21,13 +23,18 @@ public class ArmadaWindow extends JFrame
         
     public ArmadaWindow()
     {
-        renderer = new Renderer(System.getProperty("os.name").contains("osx"));
-        
-        imagePaths.add("Resources/Border.png");
+        renderer = new Renderer(System.getProperty("os.name").contains("OS X"));
+        imagePaths.add("Resources/SideBorder.png");
+        imagePaths.add("Resources/TopBorder.png");
         
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
-        images.add(GameData.getResources().getGeneratedImage(Resources.GeneratedImageIndexes.rotatedBorders));
         
+        panel = new Panel();
+        setUpWindow();
+    }
+    
+    private void setUpWindow()
+    {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Armada");
         setMinimumSize(new Dimension(1000, 600));
@@ -35,13 +42,29 @@ public class ArmadaWindow extends JFrame
         setLocationRelativeTo(null);
         
         windowSize = getSize();
-        
-        panel = new Panel();
+
         getContentPane().add(panel);
+        
+        addComponentListener(new ComponentListener()
+        {
+            @Override
+            public void componentResized(ComponentEvent e) 
+            {
+                windowSize = getSize();
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {}
+
+            @Override
+            public void componentShown(ComponentEvent e) {}
+
+            @Override
+            public void componentHidden(ComponentEvent e) {}
+        });
         
         setVisible(true);
         panel.initBufferStrategy();
-
     }
     
     public final class Panel extends JPanel
@@ -67,6 +90,6 @@ public class ArmadaWindow extends JFrame
     
     public void draw()
     {
-        renderer.drawScreen(panel.getDrawingStrategy(), images.get(1), windowSize);
+        renderer.drawScreen(panel.getDrawingStrategy(), images.get(0), images.get(1), windowSize);
     }
 }
