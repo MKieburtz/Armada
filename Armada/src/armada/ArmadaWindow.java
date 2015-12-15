@@ -18,22 +18,23 @@ public class ArmadaWindow extends JFrame
     private final Panel panel;
     private ArrayList<String> imagePaths = new ArrayList<>();
     private ArrayList<BufferedImage> images = new ArrayList<>();
+    private BufferedImage[] initBorderFrames;
     private final Renderer renderer;
     private Dimension windowSize;
         
     public ArmadaWindow()
     {
-        renderer = new Renderer(System.getProperty("os.name").contains("OS X"));
+        renderer = new Renderer(System.getProperty("os.name").contains("OS X"), new Dimension(1000, 600));
         imagePaths.add("Resources/SideBorder.png");
         imagePaths.add("Resources/TopBorder.png");
-        imagePaths.add("Resources/InitBorder.png");
         
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
+        initBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.animatedInitBorder);
         
         panel = new Panel();
         setUpWindow();
     }
-    
+
     private void setUpWindow()
     {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -91,6 +92,6 @@ public class ArmadaWindow extends JFrame
     
     public void draw()
     {
-        renderer.drawScreen(panel.getDrawingStrategy(), images.get(0), images.get(1), images.get(2), windowSize);
+        renderer.drawScreen(panel.getDrawingStrategy(), images.get(0), images.get(1), initBorderFrames, windowSize);
     }
 }

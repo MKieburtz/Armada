@@ -38,6 +38,8 @@ public class Resources
         
         // load the images
         loadAllImages();
+        
+        generateImages();
     }
     
     public static enum GeneratedImagesType
@@ -49,25 +51,24 @@ public class Resources
     private void generateImages()
     {
         // init border first
-        BufferedImage[] initImages = new BufferedImage[40];
+        BufferedImage[] initImages = new BufferedImage[41];
         
         for (int i = 0; i < initImages.length; i++)
         {
             initImages[i] = new BufferedImage(20, 1024, BufferedImage.TYPE_INT_ARGB);
         }
         
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 41; i++)
         {
-            Rectangle2D.Double totalArea = new Rectangle2D.Double(0, 0,
-                    images.get(INIT_BORDER_INDEX).getWidth(), images.get(INIT_BORDER_INDEX).getHeight());
+            Rectangle2D.Double totalArea = new Rectangle2D.Double(0, 0, INIT_BORDER_WIDTH, INIT_BORDER_HEIGHT);
             Rectangle2D.Double clipping;
             if (i == 0)
             {
-                clipping = new Rectangle2D.Double(0, 0, INIT_BORDER_WIDTH, 24);
+                clipping = new Rectangle2D.Double(0, 0, INIT_BORDER_WIDTH, INIT_BORDER_HEIGHT - 24);
             }
             else
             {
-                clipping = new Rectangle2D.Double(0, 0, INIT_BORDER_WIDTH, 24 + i * 25);
+                clipping = new Rectangle2D.Double(0, 0, INIT_BORDER_WIDTH, INIT_BORDER_HEIGHT - 24 - i * 25);
             }
             Area clippingArea = new Area(totalArea);
             clippingArea.subtract(new Area(clipping));
