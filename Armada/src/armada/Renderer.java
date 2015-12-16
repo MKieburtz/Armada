@@ -45,12 +45,9 @@ public class Renderer
 //                g2d.drawImage(verticalBorder, windowSize.width - verticalBorder.getWidth() + VERTICAL_BORDER_OFFSET, 0, null);
 //                g2d.drawImage(horizontalBorder, HORIZONTAL_BORDER_OFFSET_SIDE, HORIZONTAL_BORDER_OFFSET_TOP, null);
 //                g2d.drawImage(horizontalBorder, HORIZONTAL_BORDER_OFFSET_SIDE, windowSize.height - HORIZONTAL_BORDER_OFFSET_BOTTOM, null);
-                for (int i = 0; i < numInitFrames; i++)
-                {
-                    transform.translate(windowSize.width / 2 - INIT_BORDER_OFFSET, (windowSize.height / 2 - 12.5 * i) - 1000);
-                    g2d.transform(transform);
-                    g2d.drawImage(initBorderFrames[i], 0, 0, null);
-                }
+                transform.translate(windowSize.width / 2 - INIT_BORDER_OFFSET, windowSize.height / 2 - 1012.5 + (initBorderFrame + 1) * 12.5);
+                g2d.transform(transform);
+                g2d.drawImage(initBorderFrames[initBorderFrame], 0, 0, null);
                 g2d.setTransform(original);
                 initBorderFrame++;
                 g2d.dispose();
