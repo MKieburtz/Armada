@@ -25,6 +25,9 @@ public class Resources
     private final HashMap<FontInfo, Font> fonts = new HashMap<>();
     
     private final int TOP_BORDER_INDEX = 1;
+    private final int TOP_BORDER_HEIGHT = 30;
+    private final int TOP_BORDER_WIDTH = 2000;
+    
     private final int INIT_BORDER_INDEX = 2;
     private final int INIT_BORDER_HEIGHT = 1024;
     private final int INIT_BORDER_WIDTH = 20;
@@ -82,18 +85,31 @@ public class Resources
         // add the images
         generatedImages.put(GeneratedImagesType.animatedInitBorder, initImages);
         
-            // then generate the top borders
-            BufferedImage[] verticalBorders = new BufferedImage[100];
+        // then generate the top borders
+        BufferedImage[] horizontalBorders = new BufferedImage[80];
+
+        for (int i = 0; i < horizontalBorders.length; i++)
+        {
+            horizontalBorders[i] = new BufferedImage(2000, 20, BufferedImage.TYPE_INT_ARGB);
+        }
+
+        for (int i = 0; i < horizontalBorders.length; i++)
+        {
+            Rectangle2D.Double totalArea = new Rectangle2D.Double(0, 0, TOP_BORDER_WIDTH, TOP_BORDER_HEIGHT);
+            Rectangle2D.Double clipping = new Rectangle2D.Double(0, 0, INIT_BORDER_WIDTH - i * 25, INIT_BORDER_HEIGHT);
             
-            for (int i = 0; i < verticalBorders.length; i++)
-            {
-                verticalBorders[i] = new BufferedImage(3000, 20, BufferedImage.TYPE_INT_ARGB);
-            }
+            Area clippingArea = new Area(totalArea);
+            clippingArea.subtract(new Area(clipping));
             
-            for (int i = 0; i < verticalBorders.length; i++)
-            {
-                
-            }
+            Graphics2D g2d = horizontalBorders[i].createGraphics();
+            
+            g2d.clip(clippingArea);
+            g2d.drawImage(new ArrayList<>(images.values()).get(TOP_BORDER_INDEX), 0, 0, null);
+            g2d.dispose();
+        }
+        
+        // add the images
+        generatedImages.put(GeneratedImagesType.animatedHoritontalBorder, horizontalBorders);
     }
     
     public BufferedImage[] getGeneratedImagesForObject(GeneratedImagesType type)

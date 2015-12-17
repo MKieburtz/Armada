@@ -9,6 +9,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.*;
+import sun.nio.ch.DatagramSocketAdaptor;
 
 /**
  * @author Michael Kieburtz
@@ -16,9 +17,10 @@ import javax.swing.*;
 public class ArmadaWindow extends JFrame
 {
     private final Panel panel;
-    private ArrayList<String> imagePaths = new ArrayList<>();
-    private ArrayList<BufferedImage> images = new ArrayList<>();
-    private BufferedImage[] initBorderFrames;
+    private final ArrayList<String> imagePaths = new ArrayList<>();
+    private final ArrayList<BufferedImage> images = new ArrayList<>();
+    private final BufferedImage[] initBorderFrames;
+    private final BufferedImage[] horizontalBorderFrames;
     private final Renderer renderer;
     private Dimension windowSize;
         
@@ -30,6 +32,7 @@ public class ArmadaWindow extends JFrame
         
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
         initBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.animatedInitBorder);
+        horizontalBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.animatedHoritontalBorder);
         
         panel = new Panel();
         setUpWindow();
@@ -92,6 +95,7 @@ public class ArmadaWindow extends JFrame
     
     public void draw()
     {
-        renderer.drawScreen(panel.getDrawingStrategy(), images.get(0), images.get(1), initBorderFrames, windowSize);
+        //renderer.drawScreen(panel.getDrawingStrategy(), images.get(0), images.get(1), windowSize);
+        renderer.drawInitBorders(panel.getDrawingStrategy(), initBorderFrames, horizontalBorderFrames, windowSize);
     }
 }
