@@ -78,11 +78,22 @@ public class Resources
             g2d.clip(clippingArea);
             g2d.drawImage(new ArrayList<>(images.values()).get(INIT_BORDER_INDEX), 0, 0, null);
             g2d.dispose();
-            generatedImages.put(GeneratedImagesType.animatedInitBorder, initImages);
-            
-            // then generate the top borders
-            
         }
+        // add the images
+        generatedImages.put(GeneratedImagesType.animatedInitBorder, initImages);
+        
+            // then generate the top borders
+            BufferedImage[] verticalBorders = new BufferedImage[100];
+            
+            for (int i = 0; i < verticalBorders.length; i++)
+            {
+                verticalBorders[i] = new BufferedImage(3000, 20, BufferedImage.TYPE_INT_ARGB);
+            }
+            
+            for (int i = 0; i < verticalBorders.length; i++)
+            {
+                
+            }
     }
     
     public BufferedImage[] getGeneratedImagesForObject(GeneratedImagesType type)
