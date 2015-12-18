@@ -96,7 +96,7 @@ public class Resources
         for (int i = 0; i < horizontalBorders.length; i++)
         {
             Rectangle2D.Double totalArea = new Rectangle2D.Double(0, 0, TOP_BORDER_WIDTH, TOP_BORDER_HEIGHT);
-            Rectangle2D.Double clipping = new Rectangle2D.Double(0, 0, INIT_BORDER_WIDTH - i * 25, INIT_BORDER_HEIGHT);
+            Rectangle2D.Double clipping = new Rectangle2D.Double(0, 0, TOP_BORDER_WIDTH - i * 25, TOP_BORDER_HEIGHT);
             
             Area clippingArea = new Area(totalArea);
             clippingArea.subtract(new Area(clipping));

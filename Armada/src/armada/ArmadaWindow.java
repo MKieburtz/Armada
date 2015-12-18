@@ -93,9 +93,17 @@ public class ArmadaWindow extends JFrame
         }
     }
     
+    private boolean doneWithInit = false;
     public void draw()
     {
-        //renderer.drawScreen(panel.getDrawingStrategy(), images.get(0), images.get(1), windowSize);
-        renderer.drawInitBorders(panel.getDrawingStrategy(), initBorderFrames, horizontalBorderFrames, windowSize);
+        if (!doneWithInit)
+        {
+            doneWithInit = renderer.drawInitBorders(panel.getDrawingStrategy(), initBorderFrames, horizontalBorderFrames, images.get(0), windowSize);
+        }
+        else
+        {
+            renderer.drawScreen(panel.getDrawingStrategy(), images.get(0), images.get(1), windowSize);
+        }
+        
     }
 }

@@ -56,8 +56,8 @@ public class Renderer
     private int initBorderFrame = 0;
     private boolean doneWithInit = false;
     private int horizontalBorderFrame = 0;
-    public void drawInitBorders(BufferStrategy bs, BufferedImage[] initBorderFrames, BufferedImage[] horizontalBorderFrames, Dimension windowSize)
-    {
+    public boolean drawInitBorders(BufferStrategy bs, BufferedImage[] initBorderFrames, BufferedImage[] horizontalBorderFrames,
+            BufferedImage verticalBorder, Dimension windowSize) {
         do 
         {
             do 
@@ -91,9 +91,22 @@ public class Renderer
                     g2d.setTransform(original);
                     // set up and draw the bottom horizontal border
                     transform.setToIdentity();
-                    transform.translate(windowSize.width / 2 - 2012.5 + (horizontalBorderFrame + 1) * 12.5, HORIZONTAL_BORDER_OFFSET_BOTTOM);
+                    transform.translate(windowSize.width / 2 - 2012.5 + (horizontalBorderFrame + 1) * 12.5, windowSize.height - HORIZONTAL_BORDER_OFFSET_BOTTOM);
                     g2d.transform(transform);
                     g2d.drawImage(horizontalBorderFrames[horizontalBorderFrame], 0, 0, null);
+                    g2d.setTransform(original);
+                    transform.setToIdentity();
+                    // draw the two vertical borders
+                    // right
+                    transform.translate(windowSize.width / 2 + 12.5 * (horizontalBorderFrame + 1), 0);
+                    g2d.transform(transform);
+                    g2d.drawImage(verticalBorder, 0, 0, null);
+                    g2d.setTransform(original);
+                    transform.setToIdentity();
+                    // left
+                    transform.translate(windowSize.width / 2 - 12.5 * (horizontalBorderFrame + 1), 0);
+                    g2d.transform(transform);
+                    g2d.drawImage(verticalBorder, 0, 0, null);
                     g2d.setTransform(original);
                     horizontalBorderFrame++;
                 }
@@ -104,5 +117,7 @@ public class Renderer
             bs.show();
             
         } while (bs.contentsLost());
+        
+        return horizontalBorderFrame == numHorizontalFrames;
     }
 }
