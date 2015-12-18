@@ -29,8 +29,8 @@ public class Resources
     private final int TOP_BORDER_WIDTH = 2000;
     
     private final int INIT_BORDER_INDEX = 2;
-    private final int INIT_BORDER_HEIGHT = 1024;
-    private final int INIT_BORDER_WIDTH = 20;
+    private final int INIT_BORDER_HEIGHT = 2000;
+    private final int INIT_BORDER_WIDTH = 10;
     
     public Resources()
     {
@@ -54,25 +54,20 @@ public class Resources
     private void generateImages()
     {
         // init border first
-        BufferedImage[] initImages = new BufferedImage[41];
+        BufferedImage[] initImages = new BufferedImage[80];
         
         for (int i = 0; i < initImages.length; i++)
         {
-            initImages[i] = new BufferedImage(20, 1024, BufferedImage.TYPE_INT_ARGB);
+            initImages[i] = new BufferedImage(10, 2000, BufferedImage.TYPE_INT_ARGB);
         }
         
-        for (int i = 0; i < 41; i++)
+        for (int i = 0; i < 80; i++)
         {
             Rectangle2D.Double totalArea = new Rectangle2D.Double(0, 0, INIT_BORDER_WIDTH, INIT_BORDER_HEIGHT);
             Rectangle2D.Double clipping;
-            if (i == 0)
-            {
-                clipping = new Rectangle2D.Double(0, 0, INIT_BORDER_WIDTH, INIT_BORDER_HEIGHT - 24);
-            }
-            else
-            {
-                clipping = new Rectangle2D.Double(0, 0, INIT_BORDER_WIDTH, INIT_BORDER_HEIGHT - 24 - i * 25);
-            }
+            
+            clipping = new Rectangle2D.Double(0, 0, INIT_BORDER_WIDTH, INIT_BORDER_HEIGHT - i * 25);
+            
             Area clippingArea = new Area(totalArea);
             clippingArea.subtract(new Area(clipping));
             

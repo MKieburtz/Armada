@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
 /**
  * @author Michael Kieburtz
  */
@@ -27,9 +26,9 @@ public class Renderer
         HORIZONTAL_BORDER_OFFSET_TOP = isMac ? 6 : 14;
         HORIZONTAL_BORDER_OFFSET_SIDE = isMac ? -22 : -15;
         HORIZONTAL_BORDER_OFFSET_BOTTOM = isMac ? 14 : 22;
-        INIT_BORDER_OFFSET = 10;
+        INIT_BORDER_OFFSET = 5;
         numInitFrames = (int)Math.ceil(windowSize.getHeight() / 25);
-        numHorizontalFrames = (int)Math.ceil(windowSize.getWidth() / 25);
+        numHorizontalFrames = (int)Math.ceil(windowSize.getWidth() / 25) + 1;
     }
     
     public void drawScreen(BufferStrategy bufferStrategy, BufferedImage verticalBorder, BufferedImage horizontalBorder, Dimension windowSize) {
@@ -69,7 +68,7 @@ public class Renderer
                 AffineTransform transform = (AffineTransform)original.clone();
                 if (!doneWithInit)
                 {
-                    transform.translate(windowSize.width / 2 - INIT_BORDER_OFFSET, windowSize.height / 2 - 1012.5 + (initBorderFrame + 1) * 12.5);
+                    transform.translate(windowSize.width / 2 - INIT_BORDER_OFFSET, windowSize.height / 2 - 2000 + 12.5 + (initBorderFrame + 1) * 12.5);
                     g2d.transform(transform);
                     g2d.drawImage(initBorderFrames[initBorderFrame], 0, 0, null);
                     g2d.setTransform(original);

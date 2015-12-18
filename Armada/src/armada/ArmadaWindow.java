@@ -2,14 +2,12 @@ package armada;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.*;
-import sun.nio.ch.DatagramSocketAdaptor;
 
 /**
  * @author Michael Kieburtz
@@ -29,6 +27,7 @@ public class ArmadaWindow extends JFrame
         renderer = new Renderer(System.getProperty("os.name").contains("OS X"), new Dimension(1000, 600));
         imagePaths.add("Resources/SideBorder.png");
         imagePaths.add("Resources/TopBorder.png");
+        imagePaths.add("Resources/InitBorder.png");
         
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
         initBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.animatedInitBorder);
@@ -98,7 +97,7 @@ public class ArmadaWindow extends JFrame
     {
         if (!doneWithInit)
         {
-            doneWithInit = renderer.drawInitBorders(panel.getDrawingStrategy(), initBorderFrames, horizontalBorderFrames, images.get(0), windowSize);
+            doneWithInit = renderer.drawInitBorders(panel.getDrawingStrategy(), initBorderFrames, horizontalBorderFrames, images.get(2), windowSize);
         }
         else
         {

@@ -28,7 +28,7 @@ public class Armada
         public void run() 
         {
             window.draw();
-            drawingTimer.schedule(new UpdateAndDrawingService(), 5, TimeUnit.MILLISECONDS);
+            drawingTimer.schedule(new UpdateAndDrawingService(), 250, TimeUnit.MILLISECONDS);
         }
     }
     
