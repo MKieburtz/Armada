@@ -97,13 +97,13 @@ public class Renderer
                     transform.setToIdentity();
                     // draw the two vertical borders
                     // right
-                    transform.translate(windowSize.width / 2 + 12.5 * (horizontalBorderFrame + 1), 0);
+                    transform.translate(windowSize.width / 2 + 12.5 * (horizontalBorderFrame + 1)- 20, 0);
                     g2d.transform(transform);
                     g2d.drawImage(verticalBorder, 0, 0, null);
                     g2d.setTransform(original);
                     transform.setToIdentity();
                     // left
-                    transform.translate(windowSize.width / 2 - 12.5 * (horizontalBorderFrame + 1), 0);
+                    transform.translate(windowSize.width / 2 - 12.5 * (horizontalBorderFrame + 1) + ((horizontalBorderFrame != 0) ? 8 : 0), 0);
                     g2d.transform(transform);
                     g2d.drawImage(verticalBorder, 0, 0, null);
                     g2d.setTransform(original);
