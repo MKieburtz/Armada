@@ -30,7 +30,7 @@ public class Resources
     
     private final int INIT_BORDER_INDEX = 2;
     private final int INIT_BORDER_HEIGHT = 2000;
-    private final int INIT_BORDER_WIDTH = 10;
+    private final int INIT_BORDER_WIDTH = 15;
     
     public Resources()
     {
@@ -38,6 +38,7 @@ public class Resources
         imagePaths.add("Resources/SideBorder.png");
         imagePaths.add("Resources/TopBorder.png");
         imagePaths.add("Resources/InitBorder.png");
+        imagePaths.add("Resources/InitVerticalBorder.png");
         
         // load the images
         loadAllImages();
@@ -58,7 +59,7 @@ public class Resources
         
         for (int i = 0; i < initImages.length; i++)
         {
-            initImages[i] = new BufferedImage(10, 2000, BufferedImage.TYPE_INT_ARGB);
+            initImages[i] = new BufferedImage(20, 2000, BufferedImage.TYPE_INT_ARGB);
         }
         
         for (int i = 0; i < 80; i++)
@@ -81,17 +82,19 @@ public class Resources
         generatedImages.put(GeneratedImagesType.animatedInitBorder, initImages);
         
         // then generate the top borders
-        BufferedImage[] horizontalBorders = new BufferedImage[80];
+        BufferedImage[] horizontalBorders = new BufferedImage[79];
 
         for (int i = 0; i < horizontalBorders.length; i++)
         {
             horizontalBorders[i] = new BufferedImage(2000, 20, BufferedImage.TYPE_INT_ARGB);
         }
-
+                
         for (int i = 0; i < horizontalBorders.length; i++)
         {
+            // ensure that the first image has width, that the entire thing isn't cut
+            boolean isFirstImage = i == 0;
             Rectangle2D.Double totalArea = new Rectangle2D.Double(0, 0, TOP_BORDER_WIDTH, TOP_BORDER_HEIGHT);
-            Rectangle2D.Double clipping = new Rectangle2D.Double(0, 0, TOP_BORDER_WIDTH - i * 25, TOP_BORDER_HEIGHT);
+            Rectangle2D.Double clipping = new Rectangle2D.Double(0, 0, TOP_BORDER_WIDTH - (isFirstImage ? 25 : (i+1) * 25), TOP_BORDER_HEIGHT);
             
             Area clippingArea = new Area(totalArea);
             clippingArea.subtract(new Area(clipping));
