@@ -39,6 +39,7 @@ public class Resources
         imagePaths.add("Resources/TopBorder.png");
         imagePaths.add("Resources/InitBorder.png");
         imagePaths.add("Resources/InitVerticalBorder.png");
+        imagePaths.add("Resources/Ship.png");
         
         // load the images
         loadAllImages();
