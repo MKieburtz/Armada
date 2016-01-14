@@ -12,8 +12,5 @@ public abstract class GameEntity
     protected final ArrayList<String> imagePaths = new ArrayList<>();
     protected final ArrayList<BufferedImage> images = new ArrayList<>();
     
-    public void draw(Graphics2D g2d)
-    {
-        
-    }
+    public abstract void draw(Graphics2D g2d);
 }

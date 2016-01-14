@@ -1,5 +1,6 @@
 package armada;
 
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -10,6 +11,8 @@ public class Armada
     private final ArmadaWindow window;
     private final Resources resources;
     private final ScheduledExecutorService drawingTimer;
+    
+    private ArrayList<Ship> ships = new ArrayList<>();
             
     public Armada()
     {
@@ -18,8 +21,13 @@ public class Armada
         resources = new Resources();
         GameData.initResources(resources);
         window = new ArmadaWindow();
-        
+        addShips();
         drawingTimer.schedule(new UpdateAndDrawingService(), 0, TimeUnit.MILLISECONDS);
+    }
+    
+    private void addShips()
+    {
+        ships.add(new Ship());
     }
     
     class UpdateAndDrawingService implements Runnable
