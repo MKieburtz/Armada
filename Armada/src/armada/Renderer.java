@@ -39,10 +39,10 @@ public class Renderer
                 Graphics2D g2d = (Graphics2D)bufferStrategy.getDrawGraphics();
                 g2d.setColor(Color.BLACK);
                 g2d.fillRect(0, 0, (int)windowSize.getWidth(), (int)windowSize.getHeight());
-                g2d.drawImage(verticalBorder, -VERTICAL_BORDER_OFFSET, 0, null);
-                g2d.drawImage(verticalBorder, windowSize.width - verticalBorder.getWidth() + VERTICAL_BORDER_OFFSET, 0, null);
-                g2d.drawImage(horizontalBorder, HORIZONTAL_BORDER_OFFSET_SIDE, HORIZONTAL_BORDER_OFFSET_TOP, null);
-                g2d.drawImage(horizontalBorder, HORIZONTAL_BORDER_OFFSET_SIDE, windowSize.height - HORIZONTAL_BORDER_OFFSET_BOTTOM, null);
+                g2d.drawImage(DrawingData.getSideBorder(), -VERTICAL_BORDER_OFFSET, 0, null);
+                g2d.drawImage(DrawingData.getSideBorder(), windowSize.width - verticalBorder.getWidth() + VERTICAL_BORDER_OFFSET, 0, null);
+                g2d.drawImage(DrawingData.getTopBorder(), HORIZONTAL_BORDER_OFFSET_SIDE, HORIZONTAL_BORDER_OFFSET_TOP, null);
+                g2d.drawImage(DrawingData.getTopBorder(), HORIZONTAL_BORDER_OFFSET_SIDE, windowSize.height - HORIZONTAL_BORDER_OFFSET_BOTTOM, null);
                 g2d.dispose();
                 
             } while (bufferStrategy.contentsRestored());

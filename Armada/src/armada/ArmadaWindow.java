@@ -31,6 +31,8 @@ public class ArmadaWindow extends JFrame
         imagePaths.add("Resources/InitVerticalBorder.png");
         
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
+        DrawingData.setSideBorder(images.get(0));
+        DrawingData.setTopBorder(images.get(1));
         initBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.animatedInitBorder);
         horizontalBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.animatedHoritontalBorder);
         

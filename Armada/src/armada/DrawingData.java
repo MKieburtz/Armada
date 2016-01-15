@@ -8,22 +8,39 @@ import java.util.ArrayList;
  */
 public class DrawingData 
 {
-    ArrayList<Ship> ships = new ArrayList<>();
-    BufferedImage sideBorder;
-    BufferedImage topBorder;
-
-    public void setShips(ArrayList<Ship> ships) 
+    public static volatile ArrayList<Ship> ships = new ArrayList<>();
+    
+    public static void setShips(ArrayList<Ship> newShips) 
     {
-        this.ships = ships;
+        ships = newShips;
     }
-
-    public void setSideBorder(BufferedImage sideBorder) 
+    
+    public static ArrayList<Ship> getShips()
     {
-        this.sideBorder = sideBorder;
+        return ships;
     }
-
-    public void setTopBorder(BufferedImage topBorder) 
+    
+    public static volatile BufferedImage sideBorder;
+    
+    public static void setSideBorder(BufferedImage newSideBorder) 
     {
-        this.topBorder = topBorder;
+        sideBorder = newSideBorder;
+    }
+    
+    public static BufferedImage getSideBorder()
+    {
+        return sideBorder;
+    }
+    
+    public static volatile BufferedImage topBorder;
+
+    public static void setTopBorder(BufferedImage newTopBorder) 
+    {
+        topBorder = newTopBorder;
     }   
+    
+    public static BufferedImage getTopBorder()
+    {
+        return topBorder;
+    }
 }
