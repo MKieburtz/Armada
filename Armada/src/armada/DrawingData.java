@@ -1,5 +1,6 @@
 package armada;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -43,4 +44,17 @@ public class DrawingData
     {
         return topBorder;
     }
+    
+    public static volatile Dimension screenSize;
+
+    public static Dimension getScreenSize() 
+    {
+        return screenSize;
+    }
+
+    public static void setScreenSize(Dimension screenSize) 
+    {
+        DrawingData.screenSize = screenSize;
+    }
+    
 }

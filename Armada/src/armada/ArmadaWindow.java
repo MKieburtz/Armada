@@ -49,7 +49,8 @@ public class ArmadaWindow extends JFrame
         setLocationRelativeTo(null);
         
         windowSize = getSize();
-
+        DrawingData.setScreenSize(windowSize);
+        
         getContentPane().add(panel);
         
         addComponentListener(new ComponentListener()
@@ -58,6 +59,8 @@ public class ArmadaWindow extends JFrame
             public void componentResized(ComponentEvent e) 
             {
                 windowSize = getSize();
+                DrawingData.setScreenSize(windowSize);
+
             }
 
             @Override
@@ -104,8 +107,7 @@ public class ArmadaWindow extends JFrame
         }
         else
         {
-            renderer.drawScreen(panel.getDrawingStrategy(), images.get(0), images.get(1), windowSize);
+            renderer.drawScreen(panel.getDrawingStrategy());
         }
-        
     }
 }
