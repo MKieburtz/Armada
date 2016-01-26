@@ -20,31 +20,43 @@ public class DrawingData
     {
         return ships;
     }
+    ///////////////////////////////////////////////////////////////////
+    public static volatile BufferedImage verticalBorder;
     
-    public static volatile BufferedImage sideBorder;
-    
-    public static void setSideBorder(BufferedImage newSideBorder) 
+    public static void setVerticalBorder(BufferedImage newVerticalBorder) 
     {
-        sideBorder = newSideBorder;
+        verticalBorder = newVerticalBorder;
     }
     
-    public static BufferedImage getSideBorder()
+    public static BufferedImage getVerticalBorder()
     {
-        return sideBorder;
+        return verticalBorder;
     }
-    
-    public static volatile BufferedImage topBorder;
+    ///////////////////////////////////////////////////////////////////
+    public static volatile BufferedImage initBorder;
 
-    public static void setTopBorder(BufferedImage newTopBorder) 
+    public static BufferedImage getInitBorder() 
     {
-        topBorder = newTopBorder;
+        return initBorder;
+    }
+
+    public static void setInitBorder(BufferedImage initBorder) 
+    {
+        DrawingData.initBorder = initBorder;
+    }
+    ///////////////////////////////////////////////////////////////////
+    public static volatile BufferedImage horizontalBorder;
+
+    public static void setHorizontalBorder(BufferedImage newHorizontalBorder) 
+    {
+        horizontalBorder = newHorizontalBorder;
     }   
     
-    public static BufferedImage getTopBorder()
+    public static BufferedImage getHorizontalBorder()
     {
-        return topBorder;
+        return horizontalBorder;
     }
-    
+    ///////////////////////////////////////////////////////////////////
     public static volatile Dimension screenSize;
 
     public static Dimension getScreenSize() 
@@ -56,5 +68,6 @@ public class DrawingData
     {
         DrawingData.screenSize = screenSize;
     }
+    ///////////////////////////////////////////////////////////////////
     
 }

@@ -31,8 +31,9 @@ public class ArmadaWindow extends JFrame
         imagePaths.add("Resources/InitVerticalBorder.png");
         
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
-        DrawingData.setSideBorder(images.get(0));
-        DrawingData.setTopBorder(images.get(1));
+        DrawingData.setVerticalBorder(images.get(0));
+        DrawingData.setHorizontalBorder(images.get(1));
+        DrawingData.setInitBorder(images.get(2));
         initBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.animatedInitBorder);
         horizontalBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.animatedHoritontalBorder);
         
@@ -103,7 +104,7 @@ public class ArmadaWindow extends JFrame
     {
         if (!doneWithInit)
         {
-            doneWithInit = renderer.drawInitBorders(panel.getDrawingStrategy(), initBorderFrames, horizontalBorderFrames, images.get(3), windowSize);
+            doneWithInit = renderer.drawInitBorders(panel.getDrawingStrategy(), initBorderFrames, horizontalBorderFrames);
         }
         else
         {
