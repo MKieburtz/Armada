@@ -62,7 +62,6 @@ public class ArmadaWindow extends JFrame
             {
                 windowSize = getSize();
                 DrawingData.setScreenSize(windowSize);
-
             }
 
             @Override

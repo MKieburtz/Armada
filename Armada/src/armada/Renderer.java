@@ -2,8 +2,7 @@ package armada;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
 /**
  * @author Michael Kieburtz
  */
@@ -31,7 +30,8 @@ public class Renderer
         numHorizontalFrames = (int)Math.ceil(windowSize.getWidth() / 25) + 1;
     }
     
-    public void drawScreen(BufferStrategy bufferStrategy) {
+    public void drawScreen(BufferStrategy bufferStrategy) 
+    {
         do 
         {
             do 
@@ -43,6 +43,10 @@ public class Renderer
                 g2d.drawImage(DrawingData.getVerticalBorder(), DrawingData.getScreenSize().width - DrawingData.getVerticalBorder().getWidth() + VERTICAL_BORDER_OFFSET, 0, null);
                 g2d.drawImage(DrawingData.getHorizontalBorder(), HORIZONTAL_BORDER_OFFSET_SIDE, HORIZONTAL_BORDER_OFFSET_TOP, null);
                 g2d.drawImage(DrawingData.getHorizontalBorder(), HORIZONTAL_BORDER_OFFSET_SIDE, DrawingData.getScreenSize().height - HORIZONTAL_BORDER_OFFSET_BOTTOM, null);
+                for (Ship s : DrawingData.getShips())
+                {
+                    s.draw(g2d);
+                }
                 g2d.dispose();
                 
             } while (bufferStrategy.contentsRestored());
@@ -55,7 +59,8 @@ public class Renderer
     private int initBorderFrame = 0;
     private boolean doneWithInit = false;
     private int horizontalBorderFrame = 0;
-    public boolean drawInitBorders(BufferStrategy bs) {
+    public boolean drawInitBorders(BufferStrategy bs) 
+    {
         do 
         {
             do 

@@ -22,6 +22,7 @@ public class Armada
         GameData.initResources(resources);
         window = new ArmadaWindow();
         addShips();
+        DrawingData.setShips(ships);
         drawingTimer.schedule(new UpdateAndDrawingService(), 0, TimeUnit.MILLISECONDS);
     }
     
