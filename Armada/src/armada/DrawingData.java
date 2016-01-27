@@ -11,26 +11,26 @@ public class DrawingData
 {
     public static volatile ArrayList<Ship> ships = new ArrayList<>();
     
-    public static void setShips(ArrayList<Ship> newShips) 
-    {
-        ships = newShips;
-    }
-    
     public static ArrayList<Ship> getShips()
     {
         return ships;
     }
+    
+    public static void setShips(ArrayList<Ship> newShips) 
+    {
+        ships = newShips;
+    }
     ///////////////////////////////////////////////////////////////////
     public static volatile BufferedImage verticalBorder;
-    
-    public static void setVerticalBorder(BufferedImage newVerticalBorder) 
-    {
-        verticalBorder = newVerticalBorder;
-    }
     
     public static BufferedImage getVerticalBorder()
     {
         return verticalBorder;
+    }
+    
+    public static void setVerticalBorder(BufferedImage newVerticalBorder) 
+    {
+        verticalBorder = newVerticalBorder;
     }
     ///////////////////////////////////////////////////////////////////
     public static volatile BufferedImage initBorder;
@@ -40,9 +40,9 @@ public class DrawingData
         return initBorder;
     }
 
-    public static void setInitBorder(BufferedImage initBorder) 
+    public static void setInitBorder(BufferedImage newInitBorder) 
     {
-        DrawingData.initBorder = initBorder;
+        initBorder = newInitBorder;
     }
     ///////////////////////////////////////////////////////////////////
     public static volatile BufferedImage horizontalBorder;
@@ -64,10 +64,32 @@ public class DrawingData
         return screenSize;
     }
 
-    public static void setScreenSize(Dimension screenSize) 
+    public static void setScreenSize(Dimension newScreenSize) 
     {
-        DrawingData.screenSize = screenSize;
+        screenSize = newScreenSize;
     }
     ///////////////////////////////////////////////////////////////////
-    
+    public static BufferedImage[] horizontalBorderFrames;
+
+    public static BufferedImage[] getHorizontalBorderFrames() 
+    {
+        return horizontalBorderFrames;
+    }
+
+    public static void setHorizontalBorderFrames(BufferedImage[] newHorizontalBorderFrames) 
+    {
+        horizontalBorderFrames = newHorizontalBorderFrames;
+    }
+    ///////////////////////////////////////////////////////////////////
+    public static BufferedImage[] initBorderFrames;
+
+    public static BufferedImage[] getInitBorderFrames() 
+    {
+        return initBorderFrames;
+    }
+
+    public static void setInitBorderFrames(BufferedImage[] newInitBorderFrames) 
+    {
+        initBorderFrames =  newInitBorderFrames;
+    }
 }

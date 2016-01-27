@@ -55,7 +55,7 @@ public class Renderer
     private int initBorderFrame = 0;
     private boolean doneWithInit = false;
     private int horizontalBorderFrame = 0;
-    public boolean drawInitBorders(BufferStrategy bs, BufferedImage[] initBorderFrames, BufferedImage[] horizontalBorderFrames) {
+    public boolean drawInitBorders(BufferStrategy bs) {
         do 
         {
             do 
@@ -69,7 +69,7 @@ public class Renderer
                 {
                     transform.translate(DrawingData.getScreenSize().width / 2 - INIT_BORDER_OFFSET, DrawingData.getScreenSize().height / 2 - 2000 + 12.5 + (initBorderFrame + 1) * 12.5);
                     g2d.transform(transform);
-                    g2d.drawImage(initBorderFrames[initBorderFrame], 0, 0, null);
+                    g2d.drawImage(DrawingData.getInitBorderFrames()[initBorderFrame], 0, 0, null);
                     g2d.setTransform(original);
                     if (initBorderFrame != numInitFrames)
                     {
@@ -85,13 +85,13 @@ public class Renderer
                     // set up and draw the top horizontal border
                     transform.translate(DrawingData.getScreenSize().width / 2 - 2012.5 + (horizontalBorderFrame + 1) * 12.5 + 25, HORIZONTAL_BORDER_OFFSET_TOP);
                     g2d.transform(transform);
-                    g2d.drawImage(horizontalBorderFrames[horizontalBorderFrame], 0, 0, null);
+                    g2d.drawImage(DrawingData.getHorizontalBorderFrames()[horizontalBorderFrame], 0, 0, null);
                     g2d.setTransform(original);
                     // set up and draw the bottom horizontal border
                     transform.setToIdentity();
                     transform.translate(DrawingData.getScreenSize().width / 2 - 2012.5 + (horizontalBorderFrame + 1) * 12.5 + 25, DrawingData.getScreenSize().height - HORIZONTAL_BORDER_OFFSET_BOTTOM);
                     g2d.transform(transform);
-                    g2d.drawImage(horizontalBorderFrames[horizontalBorderFrame], 0, 0, null);
+                    g2d.drawImage(DrawingData.getHorizontalBorderFrames()[horizontalBorderFrame], 0, 0, null);
                     g2d.setTransform(original);
                     transform.setToIdentity();
                     // draw the two vertical borders
