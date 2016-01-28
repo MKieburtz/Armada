@@ -30,30 +30,35 @@ public class Renderer
         numHorizontalFrames = (int)Math.ceil(windowSize.getWidth() / 25) + 1;
     }
     
-    public void drawScreen(BufferStrategy bufferStrategy) 
+    private void drawBorders(Graphics2D g2d)
+    {          
+        g2d.drawImage(DrawingData.getVerticalBorder(), -VERTICAL_BORDER_OFFSET, 0, null);
+        g2d.drawImage(DrawingData.getVerticalBorder(), DrawingData.getScreenSize().width - DrawingData.getVerticalBorder().getWidth() + VERTICAL_BORDER_OFFSET, 0, null);
+        g2d.drawImage(DrawingData.getHorizontalBorder(), HORIZONTAL_BORDER_OFFSET_SIDE, HORIZONTAL_BORDER_OFFSET_TOP, null);
+        g2d.drawImage(DrawingData.getHorizontalBorder(), HORIZONTAL_BORDER_OFFSET_SIDE, DrawingData.getScreenSize().height - HORIZONTAL_BORDER_OFFSET_BOTTOM, null);
+    }
+    
+    public void drawScreen(BufferStrategy bs) 
     {
         do 
         {
             do 
             {                
-                Graphics2D g2d = (Graphics2D)bufferStrategy.getDrawGraphics();
+                Graphics2D g2d = (Graphics2D)bs.getDrawGraphics();
                 g2d.setColor(Color.BLACK);
                 g2d.fillRect(0, 0, (int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight());
-                g2d.drawImage(DrawingData.getVerticalBorder(), -VERTICAL_BORDER_OFFSET, 0, null);
-                g2d.drawImage(DrawingData.getVerticalBorder(), DrawingData.getScreenSize().width - DrawingData.getVerticalBorder().getWidth() + VERTICAL_BORDER_OFFSET, 0, null);
-                g2d.drawImage(DrawingData.getHorizontalBorder(), HORIZONTAL_BORDER_OFFSET_SIDE, HORIZONTAL_BORDER_OFFSET_TOP, null);
-                g2d.drawImage(DrawingData.getHorizontalBorder(), HORIZONTAL_BORDER_OFFSET_SIDE, DrawingData.getScreenSize().height - HORIZONTAL_BORDER_OFFSET_BOTTOM, null);
+                drawBorders(g2d);
                 for (Ship s : DrawingData.getShips())
                 {
                     s.draw(g2d);
                 }
                 g2d.dispose();
                 
-            } while (bufferStrategy.contentsRestored());
+            } while (bs.contentsRestored());
             
-            bufferStrategy.show();
+            bs.show();
             
-        } while (bufferStrategy.contentsLost());
+        } while (bs.contentsLost());
     }
     
     private int initBorderFrame = 0;
@@ -122,5 +127,26 @@ public class Renderer
         } while (bs.contentsLost());
         
         return horizontalBorderFrame == numHorizontalFrames;
+    }
+    
+    public void drawMainMenu(BufferStrategy bs, MainMenu mainMenu)
+    {
+        do 
+        {
+            do 
+            {                
+                Graphics2D g2d = (Graphics2D)bs.getDrawGraphics();
+                g2d.setColor(Color.BLACK);
+                g2d.fillRect(0, 0, (int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight());
+                drawBorders(g2d);
+                mainMenu.draw(g2d);
+                
+                g2d.dispose();
+                
+            } while (bs.contentsRestored());
+            
+            bs.show();
+            
+        } while (bs.contentsLost());
     }
 }

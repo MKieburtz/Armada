@@ -21,10 +21,14 @@ public class ArmadaWindow extends JFrame
     private final BufferedImage[] horizontalBorderFrames;
     private final Renderer renderer;
     private Dimension windowSize;
+    private final GameActionListener gameActionListener;
+    private final MainMenu mainMenu;
         
-    public ArmadaWindow()
+    public ArmadaWindow(GameActionListener actionListener)
     {
+        this.gameActionListener = actionListener;
         renderer = new Renderer(System.getProperty("os.name").contains("OS X"), new Dimension(1000, 600));
+        mainMenu = new MainMenu(actionListener);
         imagePaths.add("Resources/SideBorder.png");
         imagePaths.add("Resources/TopBorder.png");
         imagePaths.add("Resources/InitBorder.png");
@@ -100,15 +104,23 @@ public class ArmadaWindow extends JFrame
     }
     
     private boolean doneWithInit = false;
-    public void draw()
+    public void draw(GameState state)
     {
-        if (!doneWithInit)
+        
+        switch (state)
         {
-            doneWithInit = renderer.drawInitBorders(panel.getDrawingStrategy());
-        }
-        else
-        {
-            renderer.drawScreen(panel.getDrawingStrategy());
+            case opening:
+                if (renderer.drawInitBorders(panel.getDrawingStrategy()))
+                {
+                    gameActionListener.doneOpening();
+                }
+                break;
+            case mainMenu:
+                renderer.drawMainMenu(panel.getDrawingStrategy(), mainMenu);
+                break;
+            case playing:
+                renderer.drawScreen(panel.getDrawingStrategy());
+                break;
         }
     }
 }

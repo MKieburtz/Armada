@@ -40,6 +40,8 @@ public class Resources
         imagePaths.add("Resources/InitBorder.png");
         imagePaths.add("Resources/InitVerticalBorder.png");
         imagePaths.add("Resources/Ship.png");
+        imagePaths.add("Resources/StartButtonHover.png");
+        imagePaths.add("Resources/StartButtonNoHover.png");
         
         // load the images
         loadAllImages();
