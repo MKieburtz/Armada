@@ -77,7 +77,8 @@ public class Renderer
                 AffineTransform transform = (AffineTransform)original.clone();
                 if (!doneWithInit)
                 {
-                    transform.translate(DrawingData.getScreenSize().width / 2 - INIT_BORDER_OFFSET, DrawingData.getScreenSize().height / 2 - 2000 + 12.5 + (initBorderFrame + 1) * 12.5);
+                    transform.translate(DrawingData.getScreenSize().width / 2 - INIT_BORDER_OFFSET,
+                            DrawingData.getScreenSize().height / 2 - 2000 + 12.5 + (initBorderFrame + 1) * 12.5);
                     g2d.transform(transform);
                     g2d.drawImage(DrawingData.getInitBorderFrames()[initBorderFrame], 0, 0, null);
                     g2d.setTransform(original);
@@ -92,8 +93,22 @@ public class Renderer
                 }
                 else
                 {
+                    double borderLeftX = DrawingData.getScreenSize().width / 2 - 2012.5 + (horizontalBorderFrame + 1) * 12.5 + 25;
+                    int borderWidth = DrawingData.getHorizontalBorderFrames()[horizontalBorderFrame].getWidth();
+                    
+                    Composite originalComposite = g2d.getComposite();
+                    Composite comp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .08f);
+        
+                    g2d.setComposite(comp);
+                    g2d.setColor(Color.GREEN);
+                    transform.translate(borderLeftX, 0);
+                    g2d.transform(transform);
+                    g2d.fillRect(0, 0, borderWidth, DrawingData.getScreenSize().height);
+                    g2d.setComposite(originalComposite);
+                    g2d.setTransform(original);
+                    
                     // set up and draw the top horizontal border
-                    transform.translate(DrawingData.getScreenSize().width / 2 - 2012.5 + (horizontalBorderFrame + 1) * 12.5 + 25, HORIZONTAL_BORDER_OFFSET_TOP);
+                    transform.translate(borderLeftX, HORIZONTAL_BORDER_OFFSET_TOP);
                     g2d.transform(transform);
                     g2d.drawImage(DrawingData.getHorizontalBorderFrames()[horizontalBorderFrame], 0, 0, null);
                     g2d.setTransform(original);
