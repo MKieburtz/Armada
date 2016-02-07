@@ -1,11 +1,9 @@
 package armada;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.event.*;
+import java.awt.image.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -44,6 +42,7 @@ public class ArmadaWindow extends JFrame
         DrawingData.setInitBorderFrames(initBorderFrames);
         panel = new Panel();
         setUpWindow();
+        mainMenu.setButtonRects();
     }
 
     private void setUpWindow()
@@ -66,6 +65,7 @@ public class ArmadaWindow extends JFrame
             {
                 windowSize = getSize();
                 DrawingData.setScreenSize(windowSize);
+                mainMenu.setButtonRects();
             }
 
             @Override
@@ -89,6 +89,22 @@ public class ArmadaWindow extends JFrame
         {
             setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             setBackground(Color.BLACK);
+            
+            addMouseListener(new MouseAdapter() 
+            {
+                @Override
+                public void mousePressed(MouseEvent e)
+                {
+                    mainMenu.checkMousePressed(e.getPoint());
+                }
+                
+                @Override
+                public void mouseMoved(MouseEvent e)
+                {
+                    mainMenu.checkMouseMoved(e.getPoint());
+                }
+                
+            });
         }
         
         public void initBufferStrategy()

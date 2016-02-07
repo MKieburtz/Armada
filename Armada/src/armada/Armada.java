@@ -23,6 +23,7 @@ public class Armada implements GameActionListener
         resources = new Resources();
         GameData.initResources(resources);
         window = new ArmadaWindow(this);
+        
         addShips();
         DrawingData.setShips(ships);
         state = GameState.opening;

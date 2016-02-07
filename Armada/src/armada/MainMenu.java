@@ -36,7 +36,15 @@ public class MainMenu
         StartButtonDimensions = new Dimension(150, 75);
     }
     
-    private final float backgroundOpacity = .08f;
+    public void setButtonRects()
+    {
+        buttonRects.put(Buttons.start, new Rectangle2D.Double(DrawingData.getScreenSize().width / 2 - StartButtonDimensions.width / 2,
+                DrawingData.getScreenSize().height / 2 - StartButtonDimensions.height / 2,
+                StartButtonDimensions.width,
+                StartButtonDimensions.height));
+    }
+    
+    private final float backgroundOpacity = .1f;
     public void draw(Graphics2D g2d)
     {
         AffineTransform originalTransform = g2d.getTransform();
@@ -57,6 +65,16 @@ public class MainMenu
         g2d.drawImage(images.get(START_BUTTON_NO_HOVER), 0, 0, null);
         
         g2d.setTransform(originalTransform);
+        
+    }
+    
+    public void checkMousePressed(Point location)
+    {
+        
+    }
+    
+    public void checkMouseMoved(Point location)
+    {
         
     }
 }
