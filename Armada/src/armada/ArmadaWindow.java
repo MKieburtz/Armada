@@ -21,9 +21,21 @@ public class ArmadaWindow extends JFrame
     private Dimension windowSize;
     private final GameActionListener gameActionListener;
     private final MainMenu mainMenu;
+    private final Dimension borderSize;
         
     public ArmadaWindow(GameActionListener actionListener)
     {
+        // MOVE SOMEWHERE ELSE
+        if (System.getProperty("os.name").contains("Mac"))
+        {
+            borderSize = new Dimension(getSize().width - getContentPane().getSize().width,
+                getSize().height - getContentPane().getSize().height);
+        }
+        else
+        {
+            borderSize = new Dimension(getSize().width - getContentPane().getSize().width - 6,
+                getSize().height - getContentPane().getSize().height - 8);
+        }
         this.gameActionListener = actionListener;
         renderer = new Renderer(System.getProperty("os.name").contains("OS X"), new Dimension(1000, 600));
         mainMenu = new MainMenu(actionListener);
@@ -95,15 +107,19 @@ public class ArmadaWindow extends JFrame
                 @Override
                 public void mousePressed(MouseEvent e)
                 {
+                    System.out.println("pressed");
                     mainMenu.checkMousePressed(e.getPoint());
                 }
-                
+            });
+            
+            addMouseMotionListener(new MouseMotionAdapter() 
+            {
                 @Override
-                public void mouseMoved(MouseEvent e)
+                public void mouseMoved(MouseEvent e) 
                 {
-                    mainMenu.checkMouseMoved(e.getPoint());
+                    System.out.println(e.getLocationOnScreen());
+                    mainMenu.checkMouseMoved(e.getLocationOnScreen());
                 }
-                
             });
         }
         
@@ -117,6 +133,12 @@ public class ArmadaWindow extends JFrame
         {
             return bufferStrategy;
         }
+    }
+    
+    private Point convertToWindowCoords(Point screenCoords)
+    {
+        Point windowCoords = screenCoords;
+        
     }
     
     private boolean doneWithInit = false;
