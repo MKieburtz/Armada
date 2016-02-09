@@ -14,6 +14,7 @@ public class MainMenu
     private final ArrayList<BufferedImage> images = new ArrayList<>();
     private final ArrayList<String> imagePaths = new ArrayList<>();
     private final HashMap<Buttons, Rectangle2D.Double> buttonRects = new HashMap<>();
+    private final HashMap<Buttons, Boolean> buttonHovers = new HashMap<>();
     private final GameActionListener gameActionListener;
     
     private final int START_BUTTON_NO_HOVER = 0;
@@ -33,7 +34,7 @@ public class MainMenu
         
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
         
-        StartButtonDimensions = new Dimension(150, 75);
+        StartButtonDimensions = new Dimension(images.get(0).getWidth(), images.get(1).getHeight());
     }
     
     public void setButtonRects()
@@ -42,6 +43,7 @@ public class MainMenu
                 DrawingData.getScreenSize().height / 2 - StartButtonDimensions.height / 2,
                 StartButtonDimensions.width,
                 StartButtonDimensions.height));
+        buttonHovers.put(Buttons.start, false);
     }
     
     private final float backgroundOpacity = .1f;
@@ -62,7 +64,8 @@ public class MainMenu
                 DrawingData.getScreenSize().height / 2 - StartButtonDimensions.height / 2);
         
         g2d.setTransform(transform);
-        g2d.drawImage(images.get(START_BUTTON_NO_HOVER), 0, 0, null);
+        
+        g2d.drawImage(images.get(buttonHovers.get(Buttons.start) ? START_BUTTON_HOVER : START_BUTTON_NO_HOVER), 0, 0, null);
         
         g2d.setTransform(originalTransform);
         
@@ -70,11 +73,21 @@ public class MainMenu
     
     public void checkMousePressed(Point location)
     {
-        
+        if (buttonRects.get(Buttons.start).contains(location))
+        {
+            gameActionListener.startButtonPressed();
+        }
     }
     
     public void checkMouseMoved(Point location)
     {
-        
+        if (buttonRects.get(Buttons.start).contains(location))
+        {
+            buttonHovers.replace(Buttons.start, true);
+        }
+        else
+        {
+            buttonHovers.replace(Buttons.start, false);
+        }
     }
 }

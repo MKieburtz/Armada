@@ -25,19 +25,9 @@ public class ArmadaWindow extends JFrame
         
     public ArmadaWindow(GameActionListener actionListener)
     {
-        // MOVE SOMEWHERE ELSE
-        if (System.getProperty("os.name").contains("Mac"))
-        {
-            borderSize = new Dimension(getSize().width - getContentPane().getSize().width,
-                getSize().height - getContentPane().getSize().height);
-        }
-        else
-        {
-            borderSize = new Dimension(getSize().width - getContentPane().getSize().width - 6,
-                getSize().height - getContentPane().getSize().height - 8);
-        }
         this.gameActionListener = actionListener;
         renderer = new Renderer(System.getProperty("os.name").contains("OS X"), new Dimension(1000, 600));
+        
         mainMenu = new MainMenu(actionListener);
         imagePaths.add("Resources/SideBorder.png");
         imagePaths.add("Resources/TopBorder.png");
@@ -54,6 +44,17 @@ public class ArmadaWindow extends JFrame
         DrawingData.setInitBorderFrames(initBorderFrames);
         panel = new Panel();
         setUpWindow();
+        if (System.getProperty("os.name").contains("Mac"))
+        {
+            borderSize = new Dimension(getSize().width - getContentPane().getSize().width,
+                getSize().height - getContentPane().getSize().height);
+        }
+        else
+        {
+            borderSize = new Dimension(getSize().width - getContentPane().getSize().width - 6,
+                getSize().height - getContentPane().getSize().height - 8);
+        }
+        System.out.println(borderSize);
         mainMenu.setButtonRects();
     }
 
@@ -107,7 +108,6 @@ public class ArmadaWindow extends JFrame
                 @Override
                 public void mousePressed(MouseEvent e)
                 {
-                    System.out.println("pressed");
                     mainMenu.checkMousePressed(e.getPoint());
                 }
             });
@@ -117,8 +117,7 @@ public class ArmadaWindow extends JFrame
                 @Override
                 public void mouseMoved(MouseEvent e) 
                 {
-                    System.out.println(e.getLocationOnScreen());
-                    mainMenu.checkMouseMoved(e.getLocationOnScreen());
+                    mainMenu.checkMouseMoved(compensateForBorders(e.getPoint()));
                 }
             });
         }
@@ -134,11 +133,11 @@ public class ArmadaWindow extends JFrame
             return bufferStrategy;
         }
     }
-    
-    private Point convertToWindowCoords(Point screenCoords)
+
+    private Point compensateForBorders(Point p)
     {
-        Point windowCoords = screenCoords;
-        
+        Point newPoint = new Point(p.x + borderSize.width, p.y + borderSize.height);
+        return newPoint;
     }
     
     private boolean doneWithInit = false;
