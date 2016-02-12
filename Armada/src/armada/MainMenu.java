@@ -46,7 +46,7 @@ public class MainMenu
         buttonHovers.put(Buttons.start, false);
     }
     
-    private final float backgroundOpacity = .1f;
+    private final float backgroundOpacity = .07f;
     public void draw(Graphics2D g2d)
     {
         AffineTransform originalTransform = g2d.getTransform();

@@ -1,5 +1,6 @@
 package armada;
 
+import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -34,7 +35,7 @@ public class Armada implements GameActionListener
     {
         ships.add(new Ship());
     }
-
+    
     @Override
     public void doneOpening() 
     {
@@ -45,6 +46,24 @@ public class Armada implements GameActionListener
     public void startButtonPressed()
     {
         state = GameState.playing;
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) 
+    {
+        switch (state)
+        {
+            case mainMenu:
+                break;
+            case playing:
+                break;
+        }
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) 
+    {
+        
     }
     
     class UpdateAndDrawingService implements Runnable

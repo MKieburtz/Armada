@@ -48,6 +48,15 @@ public class Renderer
                 g2d.setColor(Color.BLACK);
                 g2d.fillRect(0, 0, (int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight());
                 drawBorders(g2d);
+                
+                Composite originalComposite = g2d.getComposite();
+                Composite comp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .07f);
+        
+                g2d.setComposite(comp);
+                g2d.setColor(Color.GREEN);
+                g2d.fillRect(0, 0, DrawingData.getScreenSize().width, DrawingData.getScreenSize().height);
+                g2d.setComposite(originalComposite);
+                
                 for (Ship s : DrawingData.getShips())
                 {
                     s.draw(g2d);
@@ -97,7 +106,7 @@ public class Renderer
                     int borderWidth = (int)((horizontalBorderFrame + 1) * 12.5) * 2;
                     
                     Composite originalComposite = g2d.getComposite();
-                    Composite comp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .1f);
+                    Composite comp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .07f);
                     
                     g2d.setComposite(comp);
                     g2d.setColor(Color.GREEN);
