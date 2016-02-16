@@ -108,8 +108,7 @@ public class ArmadaWindow extends JFrame
                 @Override
                 public void mousePressed(MouseEvent e)
                 {
-                    
-                    mainMenu.checkMousePressed(e.getPoint());
+                    gameActionListener.mousePressed(e);
                 }
             });
             
@@ -118,7 +117,7 @@ public class ArmadaWindow extends JFrame
                 @Override
                 public void mouseMoved(MouseEvent e) 
                 {
-                    mainMenu.checkMouseMoved(compensateForBorders(e.getPoint()));
+                    gameActionListener.mouseMoved(e);
                 }
             });
         }
@@ -135,14 +134,14 @@ public class ArmadaWindow extends JFrame
         }
     }
     
-    public void CheckMousePressedForMainMenu(Point p)
+    public void CheckMousePressedForMainMenu(MouseEvent e)
     {
-        mainMenu.checkMousePressed(p);
+        mainMenu.checkMousePressed(e.getPoint());
     }
     
-    public void checkMouseMovedForMainMenu(Point p)
+    public void checkMouseMovedForMainMenu(MouseEvent e)
     {
-        mainMenu.checkMouseMoved(p);
+        mainMenu.checkMouseMoved(compensateForBorders(e.getPoint()));
     }
 
     private Point compensateForBorders(Point p)

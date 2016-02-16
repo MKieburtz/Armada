@@ -49,4 +49,12 @@ public class Ship extends GameEntity
         g2d.setTransform(original);
         //g2d.drawRect((int)boundingRect.x, (int)boundingRect.y, (int)boundingRect.width, (int)boundingRect.height);
     }
+    
+    public void checkMousePressed(Point location)
+    {
+        if (boundingRect.contains(location))
+        {
+            state = State.selected;
+        }
+    }
 }

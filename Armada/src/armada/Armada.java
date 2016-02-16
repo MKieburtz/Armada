@@ -54,8 +54,10 @@ public class Armada implements GameActionListener
         switch (state)
         {
             case mainMenu:
+                    window.CheckMousePressedForMainMenu(e);
                 break;
             case playing:
+                    ships.get(0).checkMousePressed(e.getPoint());
                 break;
         }
     }
@@ -63,7 +65,14 @@ public class Armada implements GameActionListener
     @Override
     public void mouseMoved(MouseEvent e) 
     {
-        
+        switch (state)
+        {
+            case mainMenu:
+                    window.checkMouseMovedForMainMenu(e);
+                break;
+            case playing:
+                break;
+        }
     }
     
     class UpdateAndDrawingService implements Runnable
