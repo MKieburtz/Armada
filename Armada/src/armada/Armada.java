@@ -15,7 +15,7 @@ public class Armada implements GameActionListener
     
     private ArrayList<Ship> ships = new ArrayList<>();
     
-    private GameState state;
+    private GameState state = GameState.opening;
     
     public Armada()
     {
@@ -57,7 +57,7 @@ public class Armada implements GameActionListener
                     window.CheckMousePressedForMainMenu(e);
                 break;
             case playing:
-                    ships.get(0).checkMousePressed(e.getPoint());
+                    ships.get(0).checkMousePressed(window.compensateForBorders(e.getPoint()));
                 break;
         }
     }
@@ -73,6 +73,12 @@ public class Armada implements GameActionListener
             case playing:
                 break;
         }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) 
+    {
+        
     }
     
     class UpdateAndDrawingService implements Runnable

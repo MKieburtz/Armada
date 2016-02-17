@@ -11,4 +11,5 @@ public interface GameActionListener
     public void startButtonPressed();
     public void mousePressed(MouseEvent e);
     public void mouseMoved(MouseEvent e);
+    public void mouseDragged(MouseEvent e);
 }

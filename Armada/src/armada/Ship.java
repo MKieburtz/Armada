@@ -56,5 +56,9 @@ public class Ship extends GameEntity
         {
             state = State.selected;
         }
+        else
+        {
+            state = State.idle;
+        }
     }
 }
