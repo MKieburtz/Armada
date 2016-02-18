@@ -92,4 +92,16 @@ public class DrawingData
     {
         initBorderFrames =  newInitBorderFrames;
     }
+    ///////////////////////////////////////////////////////////////////
+    public static volatile SelectionRect selectionRect;
+
+    public static SelectionRect getSelectionRect() 
+    {
+        return selectionRect;
+    }
+
+    public static void setSelectionRect(SelectionRect newSelectionRect) 
+    {
+        DrawingData.selectionRect = newSelectionRect;
+    }
 }

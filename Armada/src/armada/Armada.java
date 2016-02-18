@@ -12,6 +12,7 @@ public class Armada implements GameActionListener
     private final ArmadaWindow window;
     private final Resources resources;
     private final ScheduledExecutorService drawingTimer;
+    private final SelectionRect selectionRect;
     
     private ArrayList<Ship> ships = new ArrayList<>();
     
@@ -24,7 +25,8 @@ public class Armada implements GameActionListener
         resources = new Resources();
         GameData.initResources(resources);
         window = new ArmadaWindow(this);
-        
+        selectionRect = new SelectionRect();
+        DrawingData.setSelectionRect(selectionRect);
         addShips();
         DrawingData.setShips(ships);
         state = GameState.opening;
@@ -58,6 +60,8 @@ public class Armada implements GameActionListener
                 break;
             case playing:
                     ships.get(0).checkMousePressed(window.compensateForBorders(e.getPoint()));
+                    selectionRect.activateRect(window.compensateForBorders(e.getPoint()));
+                    DrawingData.setSelectionRect(selectionRect);
                 break;
         }
     }
@@ -78,7 +82,15 @@ public class Armada implements GameActionListener
     @Override
     public void mouseDragged(MouseEvent e) 
     {
-        
+        selectionRect.updateRect(window.compensateForBorders(e.getPoint()));
+        DrawingData.setSelectionRect(selectionRect);
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) 
+    {
+        selectionRect.deactivateRect();
+        DrawingData.setSelectionRect(selectionRect);
     }
     
     class UpdateAndDrawingService implements Runnable

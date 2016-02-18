@@ -1,7 +1,6 @@
 package armada;
 
 import java.awt.*;
-import java.awt.geom.*;
 
 /**
  * @author 543021
@@ -9,6 +8,7 @@ import java.awt.geom.*;
 public class SelectionRect 
 {
     private Rectangle rect = new Rectangle();
+    private Point anchorPoint;
     private boolean active;
     
     public SelectionRect()
@@ -25,13 +25,22 @@ public class SelectionRect
     
     public void updateRect(Point newPoint)
     {
-        rect.width = newPoint.x - rect.x;
-        rect.height = newPoint.y - rect.y;
+        if (newPoint.x < anchorPoint.x)
+        {
+            rect.x = newPoint.x;
+        }
+        if (newPoint.y < anchorPoint.y)
+        {
+            rect.y = newPoint.y;
+        }         
+        rect.width = Math.abs(newPoint.x - rect.x);
+        rect.height = Math.abs(newPoint.y - rect.y);
     }
     
     public void activateRect(Point anchorPoint)
     {
         active = true;
+        this.anchorPoint = anchorPoint;
         rect.x = anchorPoint.x;
         rect.y = anchorPoint.y;
     }

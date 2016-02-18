@@ -61,6 +61,12 @@ public class Renderer
                 {
                     s.draw(g2d);
                 }
+                if (DrawingData.getSelectionRect().isActive())
+                {
+                    DrawingData.getSelectionRect().draw(g2d);
+                }
+                
+                
                 g2d.dispose();
                 
             } while (bs.contentsRestored());

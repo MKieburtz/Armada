@@ -2,7 +2,6 @@ package armada;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.event.*;
 import java.awt.image.*;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -110,6 +109,12 @@ public class ArmadaWindow extends JFrame
                 {
                     gameActionListener.mousePressed(e);
                 }
+                
+                @Override
+                public void mouseReleased(MouseEvent e)
+                {
+                    gameActionListener.mouseReleased(e);
+                }
             });
             
             addMouseMotionListener(new MouseMotionAdapter() 
@@ -123,7 +128,7 @@ public class ArmadaWindow extends JFrame
                 @Override
                 public void mouseDragged(MouseEvent e)
                 {
-                    
+                    gameActionListener.mouseDragged(e);
                 }
             });
         }
@@ -173,6 +178,7 @@ public class ArmadaWindow extends JFrame
                 break;
             case playing:
                 renderer.drawScreen(panel.getDrawingStrategy());
+                
                 break;
         }
     }
