@@ -1,5 +1,6 @@
 package armada;
 
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.concurrent.*;
@@ -82,8 +83,23 @@ public class Armada implements GameActionListener
     @Override
     public void mouseDragged(MouseEvent e) 
     {
-        selectionRect.updateRect(window.compensateForBorders(e.getPoint()));
-        DrawingData.setSelectionRect(selectionRect);
+        if (state == GameState.playing)
+        {
+            selectionRect.updateRect(window.compensateForBorders(e.getPoint()));
+            DrawingData.setSelectionRect(selectionRect);
+            
+            for (Ship s : ships)
+            {
+                if (selectionRect.checkForIntersection(s.getBoundingRect()))
+                {
+                    s.select();
+                }
+                else
+                {
+                    s.deSelect();
+                }
+            }
+        }
     }
 
     @Override

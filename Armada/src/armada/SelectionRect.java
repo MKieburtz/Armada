@@ -1,6 +1,7 @@
 package armada;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 /**
  * @author 543021
@@ -19,22 +20,24 @@ public class SelectionRect
     
     public void draw(Graphics2D g2d)
     {
-        g2d.setColor(Color.WHITE);
+        g2d.setColor(Color.CYAN);
         g2d.draw(rect);
     }
     
     public void updateRect(Point newPoint)
     {
+        rect.width = newPoint.x - rect.x;
+        rect.height = newPoint.y - rect.y;
         if (newPoint.x < anchorPoint.x)
         {
+            rect.width = anchorPoint.x - newPoint.x;
             rect.x = newPoint.x;
         }
         if (newPoint.y < anchorPoint.y)
         {
+            rect.height = anchorPoint.y - newPoint.y;
             rect.y = newPoint.y;
         }         
-        rect.width = Math.abs(newPoint.x - rect.x);
-        rect.height = Math.abs(newPoint.y - rect.y);
     }
     
     public void activateRect(Point anchorPoint)
@@ -62,5 +65,10 @@ public class SelectionRect
     public boolean isActive()
     {
         return active;
+    }
+    
+    public boolean checkForIntersection(Rectangle2D.Double other)
+    {
+        return rect.intersects(other);
     }
 }
