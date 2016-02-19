@@ -61,4 +61,19 @@ public class Ship extends GameEntity
             state = State.idle;
         }
     }
+    
+    public Rectangle2D.Double getBoundingRect()
+    {
+        return boundingRect;
+    }
+    
+    public void select()
+    {
+        state = State.selected;
+    }
+    
+    public void deSelect()
+    {
+        state = State.idle;
+    }
 }
