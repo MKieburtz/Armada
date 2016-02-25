@@ -11,7 +11,8 @@ public class Ship extends GameEntity
     private final int NORMAL_SHIP = 0;
     private final int SELECTED_SHIP = 1; 
     private State state;
-    private Rectangle2D.Double boundingRect;
+    private final Rectangle2D.Double boundingRect;
+    private final Point2D.Double centerPoint;
     
     public Ship()
     {
@@ -20,6 +21,7 @@ public class Ship extends GameEntity
         imagePaths.add("Resources/SelectedShip.png");
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
         boundingRect = new Rectangle2D.Double(location.x, location.y, images.get(NORMAL_SHIP).getWidth(), images.get(NORMAL_SHIP).getHeight());
+        centerPoint = new Point2D.Double(location.x + images.get(NORMAL_SHIP).getWidth() / 2, location.y + images.get(NORMAL_SHIP).getHeight()/ 2);
         state = State.idle;
     }
     

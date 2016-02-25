@@ -2,6 +2,7 @@ package armada;
 
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -121,6 +122,8 @@ public class Armada implements GameActionListener
     
     public static void main(String[] args) 
     {
+        Vector v = new Vector(new Point2D.Double(-3, 4));
+        System.out.println(Math.toDegrees(v.getDirectionAndMagnitude().x));
         new Armada();
     }
 }

@@ -15,11 +15,13 @@ public class Vector
     {
         this.magnitude = magnitude;
         this.direction = direction;
+        setComponents();
     }
     
     public Vector(Point2D.Double components)
     {
         this.components = components;
+        setDirectionAndMagnitude();
     }
     
     private void setComponents()
@@ -32,5 +34,15 @@ public class Vector
     {
         magnitude = Math.sqrt(Math.pow(components.x, 2) + Math.pow(components.y, 2));
         direction = Math.atan(components.y / components.x);
+    }
+    
+    public Point2D.Double getComponents()
+    {
+        return components;
+    }
+    
+    public Point2D.Double getDirectionAndMagnitude()
+    {
+        return new Point2D.Double(direction, magnitude);
     }
 }
