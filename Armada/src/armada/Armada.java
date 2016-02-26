@@ -122,8 +122,8 @@ public class Armada implements GameActionListener
     
     public static void main(String[] args) 
     {
-        Vector v = new Vector(new Point2D.Double(-3, 4));
-        System.out.println(Math.toDegrees(v.getDirectionAndMagnitude().x));
+        Vector v = new Vector(new Point2D.Double(3, -4));
+        System.out.println(Calculator.normalizeAngle(v.getDirectionAndMagnitude().x));
         new Armada();
     }
 }
