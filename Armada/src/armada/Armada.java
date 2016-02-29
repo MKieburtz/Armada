@@ -37,7 +37,10 @@ public class Armada implements GameActionListener
     
     private void addShips()
     {
-        ships.add(new Ship());
+        ships.add(new Ship(new Point2D.Double(100, 100)));
+        ships.add(new Ship(new Point2D.Double(200, 100)));
+        ships.add(new Ship(new Point2D.Double(100, 200)));
+        ships.add(new Ship(new Point2D.Double(200, 200)));
     }
     
     @Override
@@ -61,9 +64,12 @@ public class Armada implements GameActionListener
                     window.CheckMousePressedForMainMenu(e);
                 break;
             case playing:
-                    ships.get(0).checkMousePressed(window.compensateForBorders(e.getPoint()));
-                    selectionRect.activateRect(window.compensateForBorders(e.getPoint()));
                     DrawingData.setSelectionRect(selectionRect);
+                    selectionRect.activateRect(window.compensateForBorders(e.getPoint()));
+                    for (Ship s : ships)
+                    {
+                        s.checkMousePressed(window.compensateForBorders(e.getPoint()));
+                    }
                 break;
         }
     }
@@ -122,8 +128,6 @@ public class Armada implements GameActionListener
     
     public static void main(String[] args) 
     {
-        Vector v = new Vector(new Point2D.Double(3, -4));
-        System.out.println(Calculator.normalizeAngle(v.getDirectionAndMagnitude().x));
         new Armada();
     }
 }

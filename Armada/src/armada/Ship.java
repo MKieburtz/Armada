@@ -17,9 +17,9 @@ public class Ship extends GameEntity
     private final Vector accelerationVector;
     private double faceAngle;
     
-    public Ship()
+    public Ship(Point2D.Double location)
     {
-        location = new Point2D.Double(400, 400);
+        this.location = location;
         imagePaths.add("Resources/Ship.png");
         imagePaths.add("Resources/SelectedShip.png");
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
@@ -59,7 +59,7 @@ public class Ship extends GameEntity
                 break;
         }
         g2d.setTransform(original);
-        //g2d.drawRect((int)boundingRect.x, (int)boundingRect.y, (int)boundingRect.width, (int)boundingRect.height);
+        g2d.drawRect((int)boundingRect.x, (int)boundingRect.y, (int)boundingRect.width, (int)boundingRect.height);
     }
     
     public void checkMousePressed(Point location)

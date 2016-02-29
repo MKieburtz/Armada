@@ -4,12 +4,12 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 /**
- * @author 543021
+ * @author Michael Kieburtz
  */
 public class SelectionRect 
 {
     private Rectangle rect = new Rectangle();
-    private Point anchorPoint;
+    private Point anchorPoint = new Point();
     private boolean active;
     
     public SelectionRect()
@@ -69,6 +69,6 @@ public class SelectionRect
     
     public boolean checkForIntersection(Rectangle2D.Double other)
     {
-        return rect.intersects(other);
+        return rect.intersects(other) || other.contains(anchorPoint);
     }
 }

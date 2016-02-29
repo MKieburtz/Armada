@@ -47,11 +47,15 @@ public class Renderer
                 Graphics2D g2d = (Graphics2D)bs.getDrawGraphics();
                 g2d.setColor(Color.BLACK);
                 g2d.fillRect(0, 0, (int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight());
+                
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
                 drawBorders(g2d);
                 
                 Composite originalComposite = g2d.getComposite();
-                Composite comp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .07f);
-        
+                Composite comp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .1f);
+                
                 g2d.setComposite(comp);
                 g2d.setColor(Color.GREEN);
                 g2d.fillRect(0, 0, DrawingData.getScreenSize().width, DrawingData.getScreenSize().height);
@@ -112,7 +116,7 @@ public class Renderer
                     int borderWidth = (int)((horizontalBorderFrame + 1) * 12.5) * 2;
                     
                     Composite originalComposite = g2d.getComposite();
-                    Composite comp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .07f);
+                    Composite comp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .1f);
                     
                     g2d.setComposite(comp);
                     g2d.setColor(Color.GREEN);

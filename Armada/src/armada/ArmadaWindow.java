@@ -53,7 +53,6 @@ public class ArmadaWindow extends JFrame
             borderSize = new Dimension(getSize().width - getContentPane().getSize().width - 6,
                 getSize().height - getContentPane().getSize().height - 8);
         }
-        System.out.println(borderSize);
         mainMenu.setButtonRects();
     }
 
