@@ -3,7 +3,7 @@ package armada;
 import java.awt.event.MouseEvent;
 
 /**
- * @author 543021
+ * @author Michael Kieburtz
  */
 public interface GameActionListener 
 {

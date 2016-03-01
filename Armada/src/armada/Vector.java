@@ -3,13 +3,13 @@ package armada;
 import java.awt.geom.Point2D;
 
 /**
- * @author 543021
+ * @author Michael Kieburtz
  */
 public class Vector 
 {
     private double magnitude;
     private double direction;
-    private Point2D.Double components;
+    private Point2D.Double components = new Point2D.Double();
     
     public Vector(double magnitude, double direction)
     {
@@ -33,7 +33,7 @@ public class Vector
     private void setDirectionAndMagnitude()
     {
         magnitude = Math.sqrt(Math.pow(components.x, 2) + Math.pow(components.y, 2));
-        direction = Math.atan2(components.y, components.x);
+        direction = Calculator.normalizeAngle(Math.toDegrees(Math.atan2(components.y, components.x)));
     }
     
     public Point2D.Double getComponents()
@@ -43,7 +43,7 @@ public class Vector
     
     public Point2D.Double getDirectionAndMagnitude()
     {
-        return new Point2D.Double(Math.toDegrees(direction), magnitude);
+        return new Point2D.Double(direction, magnitude);
     }
     
     public Vector add(Vector other)

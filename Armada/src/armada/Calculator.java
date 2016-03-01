@@ -1,5 +1,7 @@
 package armada;
 
+import java.awt.geom.Point2D;
+
 /**
  * @author Michael Kieburtz
  */
@@ -14,5 +16,11 @@ public class Calculator
         }
         
         return angle < 0 ? angle += 360 : angle;
+    }
+    
+    public static double getAngleBetweenTwoPoints(Point2D.Double pt1, Point2D.Double pt2)
+    {
+        double angle = (double) Math.toDegrees(Math.atan2(pt2.y - pt1.y, pt2.x - pt1.x));
+        return normalizeAngle(angle);
     }
 }
