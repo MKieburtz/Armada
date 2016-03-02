@@ -20,8 +20,11 @@ public class SelectionRect
     
     public void draw(Graphics2D g2d)
     {
-        g2d.setColor(Color.CYAN);
-        g2d.draw(rect);
+        if (rect.width > 0 && rect.height > 0)
+        {
+            g2d.setColor(Color.CYAN);
+            g2d.draw(rect);
+        }
     }
     
     public void updateRect(Point newPoint)

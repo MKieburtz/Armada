@@ -61,7 +61,6 @@ public class Armada implements GameActionListener
         switch (state)
         {
             case mainMenu:
-                    window.CheckMousePressedForMainMenu(e);
                 break;
             case playing:
                     DrawingData.setSelectionRect(selectionRect);
@@ -90,30 +89,42 @@ public class Armada implements GameActionListener
     @Override
     public void mouseDragged(MouseEvent e) 
     {
-        if (state == GameState.playing)
+        switch (state)
         {
-            selectionRect.updateRect(window.compensateForBorders(e.getPoint()));
-            DrawingData.setSelectionRect(selectionRect);
-            
-            for (Ship s : ships)
-            {
-                if (selectionRect.checkForIntersection(s.getBoundingRect()))
+            case mainMenu:
+                break;
+            case playing:
+                selectionRect.updateRect(window.compensateForBorders(e.getPoint()));
+                DrawingData.setSelectionRect(selectionRect);
+
+                for (Ship s : ships)
                 {
-                    s.select();
+                    if (selectionRect.checkForIntersection(s.getBoundingRect()))
+                    {
+                        s.select();
+                    }
+                    else
+                    {
+                        s.deSelect();
+                    }
                 }
-                else
-                {
-                    s.deSelect();
-                }
-            }
+            break;
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) 
     {
-        selectionRect.deactivateRect();
-        DrawingData.setSelectionRect(selectionRect);
+        switch (state)
+        {
+            case mainMenu:
+                    window.CheckMousePressedForMainMenu(e);
+                break;
+            case playing:
+                    selectionRect.deactivateRect();
+                    DrawingData.setSelectionRect(selectionRect);
+                break;
+        }
     }
     
     class UpdateAndDrawingService implements Runnable

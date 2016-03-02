@@ -36,9 +36,14 @@ public class Ship extends GameEntity
         selected
     }
     
+    public void move(MovementCommand command)
+    {
+        
+    }
+    
     public void update()
     {
-    
+        
     }
 
     @Override
@@ -59,7 +64,7 @@ public class Ship extends GameEntity
                 break;
         }
         g2d.setTransform(original);
-        g2d.drawRect((int)boundingRect.x, (int)boundingRect.y, (int)boundingRect.width, (int)boundingRect.height);
+        //g2d.drawRect((int)boundingRect.x, (int)boundingRect.y, (int)boundingRect.width, (int)boundingRect.height);
     }
     
     public void checkMousePressed(Point location)
