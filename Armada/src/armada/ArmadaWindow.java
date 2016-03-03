@@ -53,6 +53,7 @@ public class ArmadaWindow extends JFrame
             borderSize = new Dimension(getSize().width - getContentPane().getSize().width - 6,
                 getSize().height - getContentPane().getSize().height - 8);
         }
+        GameData.setBorderSize(borderSize);
         mainMenu.setButtonRects();
     }
 
@@ -146,18 +147,12 @@ public class ArmadaWindow extends JFrame
     
     public void CheckMousePressedForMainMenu(MouseEvent e)
     {
-        mainMenu.checkMousePressed(compensateForBorders(e.getPoint()));
+        mainMenu.checkMousePressed(Calculator.compensateForBorders(e.getPoint()));
     }
     
     public void checkMouseMovedForMainMenu(MouseEvent e)
     {
-        mainMenu.checkMouseMoved(compensateForBorders(e.getPoint()));
-    }
-
-    public Point compensateForBorders(Point p)
-    {
-        Point newPoint = new Point(p.x + borderSize.width, p.y + borderSize.height);
-        return newPoint;
+        mainMenu.checkMouseMoved(Calculator.compensateForBorders(e.getPoint()));
     }
     
     private boolean doneWithInit = false;

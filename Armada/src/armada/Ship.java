@@ -24,10 +24,10 @@ public class Ship extends GameEntity
         imagePaths.add("Resources/SelectedShip.png");
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
         boundingRect = new Rectangle2D.Double(location.x, location.y, images.get(NORMAL_SHIP).getWidth(), images.get(NORMAL_SHIP).getHeight());
-        centerPoint = new Point2D.Double(location.x + images.get(NORMAL_SHIP).getWidth() / 2, location.y + images.get(NORMAL_SHIP).getHeight()/ 2);
+        centerPoint = new Point2D.Double(location.x + images.get(NORMAL_SHIP).getWidth() / 2, location.y + images.get(NORMAL_SHIP).getHeight() / 2);
         state = State.idle;
         //velocityVector = accelerationVector = new Vector(new Point2D.Double(0, 0));
-        faceAngle = 90;
+        faceAngle = 0;
     }
     
     enum State
@@ -38,7 +38,9 @@ public class Ship extends GameEntity
     
     public void move(MovementCommand command)
     {
-        
+        Point2D.Double p = new Point2D.Double(command.getDestination().x, command.getDestination().y);
+        faceAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, p);
+        System.out.println(faceAngle);
     }
     
     public void update()
@@ -52,7 +54,9 @@ public class Ship extends GameEntity
         AffineTransform original = g2d.getTransform();
         AffineTransform transform = (AffineTransform)original.clone();
         
+        transform.rotate(Math.toRadians(faceAngle), centerPoint.x, centerPoint.y);
         transform.translate(location.x, location.y);
+        
         g2d.transform(transform);
         switch (state)
         {
@@ -67,15 +71,17 @@ public class Ship extends GameEntity
         //g2d.drawRect((int)boundingRect.x, (int)boundingRect.y, (int)boundingRect.width, (int)boundingRect.height);
     }
     
-    public void checkMousePressed(Point location)
+    public boolean checkMousePressed(Point location)
     {
         if (boundingRect.contains(location))
         {
             state = State.selected;
+            return true;
         }
         else
         {
             state = State.idle;
+            return false;
         }
     }
     

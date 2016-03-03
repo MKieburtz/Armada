@@ -1,16 +1,22 @@
 package armada;
 
-import java.awt.geom.Point2D;
+import java.awt.Point;
+
 
 /**
  * @author Michael Kieburtz
  */
 public class MovementCommand 
 {
-    private Point2D.Double location;
+    private final Point destination;
     
-    public Point2D.Double getLocation()
+    public MovementCommand(Point destination) 
     {
-        return location;
+        this.destination = destination;
+    }
+        
+    public Point getDestination()
+    {
+        return destination;
     }
 }
