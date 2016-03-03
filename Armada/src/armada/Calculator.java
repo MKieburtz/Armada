@@ -21,7 +21,9 @@ public class Calculator
     
     public static double getAngleBetweenTwoPoints(Point2D.Double pt1, Point2D.Double pt2)
     {
-        double angle = (double) Math.toDegrees(Math.atan2(pt2.y - pt1.y, pt2.x - pt1.x));
+        double angle = (double) Math.toDegrees(Math.atan2(pt1.y - pt2.y, pt1.x - pt2.x));
+        System.out.println((pt2.y - pt1.y) + " " + (pt2.x - pt1.x));
+        System.out.println(angle);
         return normalizeAngle(angle);
     }
     

@@ -40,7 +40,7 @@ public class Ship extends GameEntity
     {
         Point2D.Double p = new Point2D.Double(command.getDestination().x, command.getDestination().y);
         faceAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, p);
-        System.out.println(faceAngle);
+        //System.out.println(faceAngle);
     }
     
     public void update()
@@ -54,7 +54,7 @@ public class Ship extends GameEntity
         AffineTransform original = g2d.getTransform();
         AffineTransform transform = (AffineTransform)original.clone();
         
-        transform.rotate(Math.toRadians(faceAngle), centerPoint.x, centerPoint.y);
+        transform.rotate(Math.toRadians(360 - faceAngle), centerPoint.x, centerPoint.y);
         transform.translate(location.x, location.y);
         
         g2d.transform(transform);
