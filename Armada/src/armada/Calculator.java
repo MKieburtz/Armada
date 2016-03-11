@@ -8,15 +8,19 @@ import java.awt.geom.Point2D;
  */
 public class Calculator 
 {
-    // converts an angle from [180, -180] to [0, 360]
+    // converts an angle into [0, 360]
     public static double normalizeAngle(double angle)
     {
-        if (angle > 180 || angle < -180)
+        if (angle > 360)
         {
-            angle %= 180;
+            angle %= 360;
+        }
+        else if (angle < 0)
+        {
+            angle += 360;
         }
         
-        return angle < 0 ? angle += 360 : angle;
+        return angle;
     }
     
     // converts an angle in [0, 360] to and angle that makes sense the rotate method of AffineTransform     
@@ -27,8 +31,7 @@ public class Calculator
     
     public static double getAngleBetweenTwoPoints(Point2D.Double pt1, Point2D.Double pt2)
     {
-        double angle = (double) Math.toDegrees(Math.atan2(pt2.x - pt1.x, pt2.y - pt1.y)) - 90;
-        System.out.println(normalizeAngle(angle));
+        double angle = 360 - (double) Math.toDegrees(Math.atan2(pt2.y - pt1.y, pt2.x - pt1.x));
         return normalizeAngle(angle);
     }
     

@@ -40,9 +40,9 @@ public class Armada implements GameActionListener
     private void addShips()
     {
         ships.add(new Ship(new Point2D.Double(100, 100)));
-        ships.add(new Ship(new Point2D.Double(200, 100)));
-        ships.add(new Ship(new Point2D.Double(100, 200)));
-        ships.add(new Ship(new Point2D.Double(200, 200)));
+//        ships.add(new Ship(new Point2D.Double(200, 100)));
+//        ships.add(new Ship(new Point2D.Double(100, 200)));
+//        ships.add(new Ship(new Point2D.Double(200, 200)));
     }
     
     @Override
@@ -59,13 +59,12 @@ public class Armada implements GameActionListener
     
     @Override
     public void mousePressed(MouseEvent e) 
-    {
-        switch (state)
+    {        switch (state)
         {
             case mainMenu:
                 break;
             case playing:
-                    if (SwingUtilities.isLeftMouseButton(e))
+                    if (e.getButton() == 1)
                     {
                         DrawingData.setSelectionRect(selectionRect);
                         selectionRect.activateRect(Calculator.compensateForBorders(e.getPoint()));
@@ -87,11 +86,18 @@ public class Armada implements GameActionListener
                             }
                         }
                     }
-                    else if (SwingUtilities.isRightMouseButton(e))
-                    {
-                        for (Ship s : selectedShips)
+                    else if (e.getButton() == 3)
+                    {   
+                        if (selectionRect.isActive())
                         {
-                            s.move(new MovementCommand(Calculator.compensateForBorders(e.getPoint())));
+                            selectionRect.deactivateRect();
+                        }
+                        else
+                        {
+                            for (Ship s : selectedShips)
+                            {
+                                s.move(new MovementCommand(Calculator.compensateForBorders(e.getPoint())));
+                            }
                         }
                     }
                 break;
@@ -119,25 +125,31 @@ public class Armada implements GameActionListener
             case mainMenu:
                 break;
             case playing:
-                selectionRect.updateRect(Calculator.compensateForBorders(e.getPoint()));
-                DrawingData.setSelectionRect(selectionRect);
-
-                for (Ship s : ships)
+                if (SwingUtilities.isLeftMouseButton(e))
                 {
-                    if (selectionRect.checkForIntersection(s.getBoundingRect()))
+                    if (selectionRect.isActive())
                     {
-                        if (!selectedShips.contains(s))
-                        {
-                            s.select();
-                            selectedShips.add(s);
-                        }
+                        selectionRect.updateRect(Calculator.compensateForBorders(e.getPoint()));
                     }
-                    else
+                    DrawingData.setSelectionRect(selectionRect);
+
+                    for (Ship s : ships)
                     {
-                        s.deSelect();
-                        if (selectedShips.contains(s))
+                        if (selectionRect.checkForIntersection(s.getBoundingRect()))
                         {
-                            selectedShips.remove(s);
+                            if (!selectedShips.contains(s))
+                            {
+                                s.select();
+                                selectedShips.add(s);
+                            }
+                        }
+                        else
+                        {
+                            s.deSelect();
+                            if (selectedShips.contains(s))
+                            {
+                                selectedShips.remove(s);
+                            }
                         }
                     }
                 }
