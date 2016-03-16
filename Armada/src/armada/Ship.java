@@ -13,8 +13,8 @@ public class Ship extends GameEntity
     private State state;
     private final Rectangle2D.Double boundingRect;
     private final Point2D.Double centerPoint;
-   // private final Vector velocityVector;
-    //private final Vector accelerationVector;
+    private Vector velocityVector;
+    private Vector accelerationVector;
     private double faceAngle;
     
     public Ship(Point2D.Double location)
@@ -26,8 +26,9 @@ public class Ship extends GameEntity
         boundingRect = new Rectangle2D.Double(location.x, location.y, images.get(NORMAL_SHIP).getWidth(), images.get(NORMAL_SHIP).getHeight());
         centerPoint = new Point2D.Double(location.x + images.get(NORMAL_SHIP).getWidth() / 2, location.y + images.get(NORMAL_SHIP).getHeight() / 2);
         state = State.idle;
-        //velocityVector = accelerationVector = new Vector(new Point2D.Double(0, 0));
+        velocityVector = accelerationVector = new Vector(new Point2D.Double(0, 0));
         faceAngle = 90;
+        velocityVector = new Vector(new Point2D.Double(0, 2));
     }
     
     enum State
@@ -45,7 +46,9 @@ public class Ship extends GameEntity
     
     public void update()
     {
-        
+        velocityVector = velocityVector.add(accelerationVector);
+        location.x += velocityVector.getComponents().getX();
+        location.y += velocityVector.getComponents().getY();
     }
 
     @Override

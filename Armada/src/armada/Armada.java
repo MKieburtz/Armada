@@ -177,6 +177,10 @@ public class Armada implements GameActionListener
         @Override
         public void run() 
         {
+            for (Ship s : ships)
+            {
+                s.update();
+            }
             window.draw(state);
             drawingTimer.schedule(new UpdateAndDrawingService(), 10, TimeUnit.MILLISECONDS);
         }
