@@ -3,6 +3,8 @@ package armada;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.*;
+import javafx.embed.swing.SwingFXUtils;
+import javax.swing.SwingUtilities;
 /**
  * @author Michael Kieburtz
  */
@@ -45,12 +47,12 @@ public class Renderer
             do 
             {                
                 Graphics2D g2d = (Graphics2D)bs.getDrawGraphics();
-                g2d.setColor(Color.BLACK);
-                g2d.fillRect(0, 0, (int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight());
-                
                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 
+                g2d.setColor(Color.BLACK);
+                g2d.fillRect(0, 0, (int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight());
+                                
                 drawBorders(g2d);
                 
                 Composite originalComposite = g2d.getComposite();

@@ -1,5 +1,6 @@
 package armada;
 
+import java.awt.BufferCapabilities;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
@@ -177,12 +178,22 @@ public class Armada implements GameActionListener
         @Override
         public void run() 
         {
-            for (Ship s : ships)
+            SwingUtilities.invokeLater(new Runnable() 
             {
-                s.update();
-            }
-            window.draw(state);
-            drawingTimer.schedule(new UpdateAndDrawingService(), 10, TimeUnit.MILLISECONDS);
+                @Override
+                public void run() 
+                {
+                    if (state == GameState.playing)
+                    {
+                        for (Ship s : ships)
+                        {
+                            s.update();
+                        }
+                    }
+                    window.draw(state);
+                    drawingTimer.schedule(new UpdateAndDrawingService(), 10, TimeUnit.MILLISECONDS);
+                }
+            });
         }
     }
     

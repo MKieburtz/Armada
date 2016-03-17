@@ -26,9 +26,9 @@ public class Ship extends GameEntity
         boundingRect = new Rectangle2D.Double(location.x, location.y, images.get(NORMAL_SHIP).getWidth(), images.get(NORMAL_SHIP).getHeight());
         centerPoint = new Point2D.Double(location.x + images.get(NORMAL_SHIP).getWidth() / 2, location.y + images.get(NORMAL_SHIP).getHeight() / 2);
         state = State.idle;
-        velocityVector = accelerationVector = new Vector(new Point2D.Double(0, 0));
+        accelerationVector = new Vector(-.1, 90);
         faceAngle = 90;
-        velocityVector = new Vector(new Point2D.Double(0, 2));
+        velocityVector = new Vector(new Point2D.Double(0, 10));
     }
     
     enum State
@@ -56,7 +56,6 @@ public class Ship extends GameEntity
     {
         AffineTransform original = g2d.getTransform();
         AffineTransform transform = (AffineTransform)original.clone();
-        
         transform.rotate(Math.toRadians(Calculator.convertAngleForAffineTransform(faceAngle)), centerPoint.x, centerPoint.y);
         transform.translate(location.x, location.y);
         
