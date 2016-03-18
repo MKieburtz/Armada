@@ -25,7 +25,7 @@ public class ArmadaWindow extends JFrame
     public ArmadaWindow(GameActionListener actionListener)
     {
         this.gameActionListener = actionListener;
-        renderer = new Renderer(System.getProperty("os.name").contains("OS X"), new Dimension(1000, 600));
+        renderer = new Renderer(System.getProperty("os.name").contains("OS X"), new Dimension(1000, 600));   
         
         mainMenu = new MainMenu(actionListener);
         imagePaths.add("Resources/SideBorder.png");
@@ -67,6 +67,7 @@ public class ArmadaWindow extends JFrame
         
         windowSize = getSize();
         DrawingData.setScreenSize(windowSize);
+        renderer.sizeChanged();
         
         getContentPane().add(panel);
         
@@ -77,6 +78,7 @@ public class ArmadaWindow extends JFrame
             {
                 windowSize = getSize();
                 DrawingData.setScreenSize(windowSize);
+                renderer.sizeChanged();
                 mainMenu.setButtonRects();
             }
 
@@ -91,12 +93,10 @@ public class ArmadaWindow extends JFrame
         });
         
         setVisible(true);
-        panel.initBufferStrategy();
     }
     
     public final class Panel extends JPanel
     {
-        private BufferStrategy bufferStrategy;
         public Panel()
         {
             setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -132,17 +132,6 @@ public class ArmadaWindow extends JFrame
                 }
             });
         }
-        
-        public void initBufferStrategy()
-        {
-            createBufferStrategy(2);
-            bufferStrategy = getBufferStrategy();
-        }
-
-        public BufferStrategy getDrawingStrategy() 
-        {
-            return bufferStrategy;
-        }
     }
     
     public void CheckMousePressedForMainMenu(MouseEvent e)
@@ -162,16 +151,16 @@ public class ArmadaWindow extends JFrame
         switch (state)
         {
             case opening:
-                if (renderer.drawInitBorders(panel.getDrawingStrategy()))
+                if (renderer.drawInitBorders(panel.getGraphics()))
                 {
                     gameActionListener.doneOpening();
                 }
                 break;
             case mainMenu:
-                renderer.drawMainMenu(panel.getDrawingStrategy(), mainMenu);
+                renderer.drawMainMenu(panel.getGraphics(), mainMenu);
                 break;
             case playing:
-                renderer.drawScreen(panel.getDrawingStrategy());
+                renderer.drawScreen(panel.getGraphics());
                 
                 break;
         }
