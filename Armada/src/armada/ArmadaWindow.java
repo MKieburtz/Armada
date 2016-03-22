@@ -66,10 +66,9 @@ public class ArmadaWindow extends JFrame
         setLocationRelativeTo(null);
         
         windowSize = getSize();
-        DrawingData.setScreenSize(windowSize);
-        renderer.sizeChanged();
         
         getContentPane().add(panel);
+        
         
         addComponentListener(new ComponentListener()
         {
@@ -77,7 +76,7 @@ public class ArmadaWindow extends JFrame
             public void componentResized(ComponentEvent e) 
             {
                 windowSize = getSize();
-                DrawingData.setScreenSize(windowSize);
+                DrawingData.setScreenSize(panel.getSize());
                 renderer.sizeChanged();
                 mainMenu.setButtonRects();
             }
@@ -93,6 +92,8 @@ public class ArmadaWindow extends JFrame
         });
         
         setVisible(true);
+        DrawingData.setScreenSize(panel.getSize());
+        renderer.sizeChanged();
     }
     
     public final class Panel extends JPanel
@@ -100,7 +101,6 @@ public class ArmadaWindow extends JFrame
         public Panel()
         {
             setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            setBackground(Color.BLACK);
             
             addMouseListener(new MouseAdapter() 
             {
@@ -161,7 +161,6 @@ public class ArmadaWindow extends JFrame
                 break;
             case playing:
                 renderer.drawScreen(panel.getGraphics());
-                
                 break;
         }
     }

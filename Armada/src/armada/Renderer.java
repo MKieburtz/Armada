@@ -25,10 +25,10 @@ public class Renderer
     {
         // because Macs don't have borders on the windows except at the top
         this.isMac = isMac;
-        VERTICAL_BORDER_OFFSET = isMac ? 16 : 8; 
-        HORIZONTAL_BORDER_OFFSET_TOP = isMac ? 6 : 14;
-        HORIZONTAL_BORDER_OFFSET_SIDE = isMac ? -22 : -15;
-        HORIZONTAL_BORDER_OFFSET_BOTTOM = isMac ? 14 : 22;
+        VERTICAL_BORDER_OFFSET = isMac ? 16 : 15; 
+        HORIZONTAL_BORDER_OFFSET_TOP = isMac ? 6 : -15;
+        HORIZONTAL_BORDER_OFFSET_SIDE = isMac ? -22 : -25;
+        HORIZONTAL_BORDER_OFFSET_BOTTOM = isMac ? 14 : 15;
         INIT_BORDER_OFFSET = 5;
         numInitFrames = (int)Math.ceil(windowSize.getHeight() / 25);
         numHorizontalFrames = (int)Math.ceil(windowSize.getWidth() / 25) + 1;
@@ -48,8 +48,8 @@ public class Renderer
     
     private void drawBorders(Graphics2D g2d)
     {          
-        g2d.drawImage(DrawingData.getVerticalBorder(), -VERTICAL_BORDER_OFFSET, 0, null);
-        g2d.drawImage(DrawingData.getVerticalBorder(), DrawingData.getScreenSize().width - DrawingData.getVerticalBorder().getWidth() + VERTICAL_BORDER_OFFSET, 0, null);
+        g2d.drawImage(DrawingData.getVerticalBorder(), -VERTICAL_BORDER_OFFSET, -VERTICAL_BORDER_OFFSET, null);
+        g2d.drawImage(DrawingData.getVerticalBorder(), DrawingData.getScreenSize().width - DrawingData.getVerticalBorder().getWidth() + VERTICAL_BORDER_OFFSET, -VERTICAL_BORDER_OFFSET, null);
         g2d.drawImage(DrawingData.getHorizontalBorder(), HORIZONTAL_BORDER_OFFSET_SIDE, HORIZONTAL_BORDER_OFFSET_TOP, null);
         g2d.drawImage(DrawingData.getHorizontalBorder(), HORIZONTAL_BORDER_OFFSET_SIDE, DrawingData.getScreenSize().height - HORIZONTAL_BORDER_OFFSET_BOTTOM, null);
     }
