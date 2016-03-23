@@ -16,6 +16,8 @@ public class Armada implements GameActionListener
     private final ArmadaWindow window;
     private final Resources resources;
     private final ScheduledExecutorService drawingTimer;
+    private final ScheduledExecutorService updatingTimer;
+    private final ScheduledExecutorService fpsRecorder;
     private final SelectionRect selectionRect;
     
     private ArrayList<Ship> ships = new ArrayList<>();
@@ -23,10 +25,16 @@ public class Armada implements GameActionListener
     
     private GameState state = GameState.opening;
     
+    private int framesDrawn = 0;
+    private int FPS = 0;
+    private int updates = 0;
+    private int UPS = 0;
+    
     public Armada()
     {
-        drawingTimer = Executors.newSingleThreadScheduledExecutor();
-        
+        drawingTimer = Executors.newScheduledThreadPool(2);
+        updatingTimer = Executors.newScheduledThreadPool(2);
+        fpsRecorder = Executors.newSingleThreadScheduledExecutor();
         resources = new Resources();
         GameData.initResources(resources);
         window = new ArmadaWindow(this);
@@ -35,7 +43,9 @@ public class Armada implements GameActionListener
         addShips();
         DrawingData.setShips(ships);
         state = GameState.opening;
-        drawingTimer.schedule(new UpdateAndDrawingService(), 0, TimeUnit.MILLISECONDS);
+        drawingTimer.schedule(new DrawingService(), 0, TimeUnit.MILLISECONDS);
+        updatingTimer.schedule(new UpdateService(), 0, TimeUnit.MILLISECONDS);
+        fpsRecorder.schedule(new RecorderService(), 0, TimeUnit.MILLISECONDS);
     }
     
     private void addShips()
@@ -173,7 +183,24 @@ public class Armada implements GameActionListener
         }
     }
     
-    class UpdateAndDrawingService implements Runnable
+    class UpdateService implements Runnable
+    {
+        @Override
+        public void run() 
+        {
+            if (state == GameState.playing)
+            {
+                for (Ship s : ships)
+                {
+                    s.update();
+                }
+            }
+            updates++;
+            drawingTimer.schedule(new UpdateService(), 24, TimeUnit.MILLISECONDS);
+        }
+    }
+    
+    class DrawingService implements Runnable
     {
         @Override
         public void run() 
@@ -183,17 +210,25 @@ public class Armada implements GameActionListener
                 @Override
                 public void run() 
                 {
-                    if (state == GameState.playing)
-                    {
-                        for (Ship s : ships)
-                        {
-                            s.update();
-                        }
-                    }
                     window.draw(state);
-                    drawingTimer.schedule(new UpdateAndDrawingService(), 10, TimeUnit.MILLISECONDS);
+                    framesDrawn++;
+                    drawingTimer.schedule(new DrawingService(), 10, TimeUnit.MILLISECONDS);
                 }
             });
+        }
+    }
+    
+    class RecorderService implements Runnable
+    {
+        @Override
+        public void run()
+        {
+            FPS = framesDrawn;
+            framesDrawn = 0;
+            UPS = updates;
+            updates = 0;
+            System.out.println(FPS + " " + UPS);
+            fpsRecorder.schedule(new RecorderService(), 1, TimeUnit.SECONDS);
         }
     }
     

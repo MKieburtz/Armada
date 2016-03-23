@@ -19,7 +19,7 @@ public class Renderer
     private final int numHorizontalFrames;
     
     private final GraphicsConfiguration graphicsConfig = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
-    private VolatileImage drawingImage  = graphicsConfig.createCompatibleVolatileImage(1, 1);
+    private BufferedImage drawingImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
     
     public Renderer(boolean isMac, Dimension windowSize)
     {
@@ -36,14 +36,15 @@ public class Renderer
     
     public void sizeChanged() 
     {
-        if (isMac)
-        {
-            drawingImage = graphicsConfig.createCompatibleVolatileImage((int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight(), Transparency.TRANSLUCENT);
-        } 
-        else 
-        {
-            drawingImage = graphicsConfig.createCompatibleVolatileImage((int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight());
-        }
+        drawingImage = new BufferedImage((int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight(), BufferedImage.TYPE_INT_ARGB);
+//        if (isMac)
+//        {
+//            drawingImage = graphicsConfig.createCompatibleVolatileImage((int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight(), Transparency.TRANSLUCENT);
+//        } 
+//        else 
+//        {
+//            drawingImage = graphicsConfig.createCompatibleVolatileImage((int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight());
+//        }
     }
     
     private void drawBorders(Graphics2D g2d)
@@ -57,12 +58,13 @@ public class Renderer
     public void drawScreen(Graphics g) 
     {           
         Graphics2D g2d = drawingImage.createGraphics();
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, (int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight());
 
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
         drawBorders(g2d);
 
         Composite originalComposite = g2d.getComposite();
@@ -83,6 +85,7 @@ public class Renderer
         }
         g.drawImage(drawingImage, 0, 0, null);
         g2d.dispose();
+        g.dispose();
     }
     
     private int initBorderFrame = 0;
@@ -159,6 +162,7 @@ public class Renderer
         g.drawImage(drawingImage, 0, 0, null);
         
         g2d.dispose();
+        g.dispose();
         
         return horizontalBorderFrame == numHorizontalFrames;
     }
@@ -174,5 +178,6 @@ public class Renderer
         g.drawImage(drawingImage, 0, 0, null);
         
         g2d.dispose();
+        g.dispose();
     }
 }
