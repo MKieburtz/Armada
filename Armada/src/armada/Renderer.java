@@ -15,6 +15,7 @@ public class Renderer
     private final int HORIZONTAL_BORDER_OFFSET_SIDE;
     private final int HORIZONTAL_BORDER_OFFSET_BOTTOM;
     private final int INIT_BORDER_OFFSET;
+    private final int INIT_BORDER_OFFSET_VERT;
     private final int numInitFrames;
     private final int numHorizontalFrames;
     
@@ -30,6 +31,7 @@ public class Renderer
         HORIZONTAL_BORDER_OFFSET_SIDE = isMac ? -22 : -25;
         HORIZONTAL_BORDER_OFFSET_BOTTOM = isMac ? 14 : 15;
         INIT_BORDER_OFFSET = 5;
+        INIT_BORDER_OFFSET_VERT = -30;
         numInitFrames = (int)Math.ceil(windowSize.getHeight() / 25);
         numHorizontalFrames = (int)Math.ceil(windowSize.getWidth() / 25) + 1;
     }
@@ -83,8 +85,8 @@ public class Renderer
         {
             DrawingData.getSelectionRect().draw(g2d);
         }
-        g.drawImage(drawingImage, 0, 0, null);
         g2d.dispose();
+        g.drawImage(drawingImage, 0, 0, null);
         g.dispose();
     }
     
@@ -117,7 +119,7 @@ public class Renderer
         }
         else
         {
-            double borderLeftX = DrawingData.getScreenSize().width / 2 - 2012.5 + (horizontalBorderFrame + 1) * 12.5 + 25;
+            double borderLeftX = DrawingData.getScreenSize().width / 2 - 2012.5 + (horizontalBorderFrame + 1) * 12.5 + 27.5;
             int borderWidth = (int)((horizontalBorderFrame + 1) * 12.5) * 2;
 
             Composite originalComposite = g2d.getComposite();
@@ -139,29 +141,27 @@ public class Renderer
             g2d.setTransform(original);
             // set up and draw the bottom horizontal border
             transform.setToIdentity();
-            transform.translate(DrawingData.getScreenSize().width / 2 - 2012.5 + (horizontalBorderFrame + 1) * 12.5 + 25, DrawingData.getScreenSize().height - HORIZONTAL_BORDER_OFFSET_BOTTOM);
+            transform.translate(DrawingData.getScreenSize().width / 2 - 2012.5 + (horizontalBorderFrame + 1) * 12.5 + 27.5, DrawingData.getScreenSize().height - HORIZONTAL_BORDER_OFFSET_BOTTOM);
             g2d.transform(transform);
             g2d.drawImage(DrawingData.getHorizontalBorderFrames()[horizontalBorderFrame], 0, 0, null);
             g2d.setTransform(original);
             transform.setToIdentity();
             // draw the two vertical borders
             // right
-            transform.translate(DrawingData.getScreenSize().width / 2 + 12.5 * (horizontalBorderFrame + 1) - 24, 0);
+            transform.translate(DrawingData.getScreenSize().width / 2 + 12.5 * (horizontalBorderFrame + 1) - 12, INIT_BORDER_OFFSET_VERT);
             g2d.transform(transform);
             g2d.drawImage(DrawingData.getInitBorder(), 0, 0, null);
             g2d.setTransform(original);
             transform.setToIdentity();
             // left
-            transform.translate(DrawingData.getScreenSize().width / 2 - 12.5 * (horizontalBorderFrame + 1), 0);
+            transform.translate(DrawingData.getScreenSize().width / 2 - 12.5 * (horizontalBorderFrame + 1), INIT_BORDER_OFFSET_VERT);
             g2d.transform(transform);
             g2d.drawImage(DrawingData.getInitBorder(), 0, 0, null);
             g2d.setTransform(original);
             horizontalBorderFrame++;
         }
-        
-        g.drawImage(drawingImage, 0, 0, null);
-        
         g2d.dispose();
+        g.drawImage(drawingImage, 0, 0, null);
         g.dispose();
         
         return horizontalBorderFrame == numHorizontalFrames;
@@ -174,10 +174,9 @@ public class Renderer
         g2d.fillRect(0, 0, (int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight());
         drawBorders(g2d);
         mainMenu.draw(g2d);
-
+        g2d.dispose();
         g.drawImage(drawingImage, 0, 0, null);
         
-        g2d.dispose();
         g.dispose();
     }
 }

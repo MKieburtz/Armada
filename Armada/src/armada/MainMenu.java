@@ -68,7 +68,7 @@ public class MainMenu
         g2d.drawImage(images.get(buttonHovers.get(Buttons.start) ? START_BUTTON_HOVER : START_BUTTON_NO_HOVER), 0, 0, null);
         
         g2d.setTransform(originalTransform);
-        
+        //g2d.draw(buttonRects.get(Buttons.start));
     }
     
     public void checkMousePressed(Point location)

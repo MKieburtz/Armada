@@ -50,8 +50,8 @@ public class ArmadaWindow extends JFrame
         }
         else
         {
-            borderSize = new Dimension(getSize().width - getContentPane().getSize().width - 6,
-                getSize().height - getContentPane().getSize().height - 8);
+            borderSize = new Dimension(getSize().width - getContentPane().getSize().width - 15,
+                getSize().height - getContentPane().getSize().height - 35);
         }
         GameData.setBorderSize(borderSize);
         mainMenu.setButtonRects();
