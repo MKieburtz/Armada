@@ -40,6 +40,7 @@ public class Armada implements GameActionListener
         window = new ArmadaWindow(this);
         selectionRect = new SelectionRect();
         DrawingData.setSelectionRect(selectionRect);
+        DrawingData.setFps(0);
         addShips();
         DrawingData.setShips(ships);
         state = GameState.opening;
@@ -51,9 +52,9 @@ public class Armada implements GameActionListener
     private void addShips()
     {
         ships.add(new Ship(new Point2D.Double(100, 100)));
-        ships.add(new Ship(new Point2D.Double(200, 100)));
-        ships.add(new Ship(new Point2D.Double(100, 200)));
-        ships.add(new Ship(new Point2D.Double(200, 200)));
+//        ships.add(new Ship(new Point2D.Double(200, 100)));
+//        ships.add(new Ship(new Point2D.Double(100, 200)));
+//        ships.add(new Ship(new Point2D.Double(200, 200)));
     }
     
     @Override
@@ -227,13 +228,17 @@ public class Armada implements GameActionListener
             framesDrawn = 0;
             UPS = updates;
             updates = 0;
-            System.out.println(FPS + " " + UPS);
+            DrawingData.setFps(FPS);
+            DrawingData.setUPS(UPS);
             fpsRecorder.schedule(new RecorderService(), 1, TimeUnit.SECONDS);
         }
     }
     
     public static void main(String[] args) 
     {
+        Thread.setDefaultUncaughtExceptionHandler(new EDTExceptionHandler());
+        System.setProperty("sun.awt.exception.handler", EDTExceptionHandler.class.getName());
+        
         new Armada();
     }
 }

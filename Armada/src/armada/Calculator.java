@@ -8,6 +8,16 @@ import java.awt.geom.Point2D;
  */
 public class Calculator 
 {
+    public static double CalcAngleMoveX(double angle) 
+    {
+        return Math.cos(Math.toRadians(angle));
+    }
+
+    public static double CalcAngleMoveY(double angle) 
+    {
+        return Math.sin(Math.toRadians(angle));
+    }
+    
     // converts an angle into [0, 360]
     public static double normalizeAngle(double angle)
     {

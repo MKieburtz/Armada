@@ -102,6 +102,30 @@ public class DrawingData
 
     public static void setSelectionRect(SelectionRect newSelectionRect) 
     {
-        DrawingData.selectionRect = newSelectionRect;
+        selectionRect = newSelectionRect;
+    }
+    ///////////////////////////////////////////////////////////////////
+    public static volatile int FPS;
+    
+    public static int getFps()
+    {
+        return FPS;
+    }
+    
+    public static void setFps(int newFps)
+    {
+        FPS = newFps;
+    }
+    ///////////////////////////////////////////////////////////////////
+    public static volatile int UPS;
+
+    public static int getUPS() 
+    {
+        return UPS;
+    }
+
+    public static void setUPS(int NewUPS) 
+    {
+        UPS = NewUPS;
     }
 }

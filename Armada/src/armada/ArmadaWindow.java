@@ -46,7 +46,7 @@ public class ArmadaWindow extends JFrame
         if (System.getProperty("os.name").contains("Mac"))
         {
             borderSize = new Dimension(getSize().width - getContentPane().getSize().width,
-                getSize().height - getContentPane().getSize().height);
+                getSize().height - getContentPane().getSize().height - 25);
         }
         else
         {

@@ -28,7 +28,8 @@ public class Ship extends GameEntity
         state = State.idle;
         accelerationVector = new Vector(0, 0);
         faceAngle = 90;
-        velocityVector = new Vector(new Point2D.Double(0, 2));
+        velocityVector = new Vector(2, faceAngle);
+        System.out.println(velocityVector.getComponents());
     }
     
     enum State
@@ -49,6 +50,9 @@ public class Ship extends GameEntity
         velocityVector = velocityVector.add(accelerationVector);
         location.x += velocityVector.getComponents().getX();
         location.y += velocityVector.getComponents().getY();
+        
+        boundingRect.x = location.x;
+        boundingRect.y = location.y;
     }
 
     @Override
@@ -56,6 +60,7 @@ public class Ship extends GameEntity
     {
         AffineTransform original = g2d.getTransform();
         AffineTransform transform = (AffineTransform)original.clone();
+        
         transform.rotate(Math.toRadians(Calculator.convertAngleForAffineTransform(faceAngle)), centerPoint.x, centerPoint.y);
         transform.translate(location.x, location.y);
         
@@ -70,7 +75,7 @@ public class Ship extends GameEntity
                 break;
         }
         g2d.setTransform(original);
-        //g2d.drawRect((int)boundingRect.x, (int)boundingRect.y, (int)boundingRect.width, (int)boundingRect.height);
+        g2d.draw(boundingRect);
     }
     
     public boolean checkMousePressed(Point location)

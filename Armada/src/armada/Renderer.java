@@ -19,15 +19,16 @@ public class Renderer
     private final int numInitFrames;
     private final int numHorizontalFrames;
     
-    private final GraphicsConfiguration graphicsConfig = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
     private BufferedImage drawingImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+    
+    private final Font dataFont = new Font("SansSerif", Font.PLAIN, 10);
     
     public Renderer(boolean isMac, Dimension windowSize)
     {
         // because Macs don't have borders on the windows except at the top
         this.isMac = isMac;
         VERTICAL_BORDER_OFFSET = isMac ? 16 : 15; 
-        HORIZONTAL_BORDER_OFFSET_TOP = isMac ? 6 : -15;
+        HORIZONTAL_BORDER_OFFSET_TOP = isMac ? -16 : -15;
         HORIZONTAL_BORDER_OFFSET_SIDE = isMac ? -22 : -25;
         HORIZONTAL_BORDER_OFFSET_BOTTOM = isMac ? 14 : 15;
         INIT_BORDER_OFFSET = 5;
@@ -39,14 +40,6 @@ public class Renderer
     public void sizeChanged() 
     {
         drawingImage = new BufferedImage((int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight(), BufferedImage.TYPE_INT_ARGB);
-//        if (isMac)
-//        {
-//            drawingImage = graphicsConfig.createCompatibleVolatileImage((int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight(), Transparency.TRANSLUCENT);
-//        } 
-//        else 
-//        {
-//            drawingImage = graphicsConfig.createCompatibleVolatileImage((int)DrawingData.getScreenSize().getWidth(), (int)DrawingData.getScreenSize().getHeight());
-//        }
     }
     
     private void drawBorders(Graphics2D g2d)
@@ -77,6 +70,8 @@ public class Renderer
         g2d.fillRect(0, 0, DrawingData.getScreenSize().width, DrawingData.getScreenSize().height);
         g2d.setComposite(originalComposite);
 
+        //drawDebugData(g2d);
+        
         for (Ship s : DrawingData.getShips())
         {
             s.draw(g2d);
@@ -88,6 +83,12 @@ public class Renderer
         g2d.dispose();
         g.drawImage(drawingImage, 0, 0, null);
         g.dispose();
+    }
+    
+    private void drawDebugData(Graphics2D g2d)
+    {
+        g2d.drawString("FPS: " + DrawingData.getFps(), 50, 50);
+        g2d.drawString("UPS: " + DrawingData.getUPS(), 50, 100);
     }
     
     private int initBorderFrame = 0;
