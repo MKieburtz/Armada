@@ -30,10 +30,21 @@ public class Vector
         components.y = magnitude * Math.sin(Math.toRadians(direction));
     }
     
+    public void setComponents(Point2D.Double components)
+    {
+        this.components = components;
+    }
+    
     private void setDirectionAndMagnitude()
     {
         magnitude = Math.sqrt(Math.pow(components.x, 2) + Math.pow(components.y, 2));
         direction = Calculator.normalizeAngle(Math.toDegrees(Math.atan2(components.y, components.x)));
+    }
+    
+    public void setDirectionAndMagnitude(double magnitude, double direction)
+    {
+        this.magnitude = magnitude;
+        this.direction = direction;
     }
     
     public Point2D.Double getComponents()

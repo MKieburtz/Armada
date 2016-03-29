@@ -49,4 +49,18 @@ public class Calculator
     {
         return new Point(p.x + GameData.getBorderSize().width, p.y + GameData.getBorderSize().height);
     }
+    
+    /*
+    Using the formula:
+    X = cx + (px - cx) * cos(theta) - (py - cy) * sin(theta)
+    Y = cy + (px - cx) * sin(theta) + (py - cy) * cos(theta)
+    */
+    
+    public static Point2D.Double rotatePointAroundPoint(Point2D.Double point, Point2D.Double rotationPoint, double angle)
+    {
+        double newX = rotationPoint.x + (point.x - rotationPoint.x) * Math.cos(Math.toRadians(360 - angle)) - (point.y - rotationPoint.y) * Math.sin(Math.toRadians(360 - angle));
+        double newY = rotationPoint.y + (point.x - rotationPoint.x) * Math.sin(Math.toRadians(360 - angle)) + (point.y - rotationPoint.y) * Math.cos(Math.toRadians(360 - angle));
+        
+        return new Point2D.Double(newX, newY);
+    }
 }
