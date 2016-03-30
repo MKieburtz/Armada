@@ -32,9 +32,9 @@ public class Ship extends GameEntity
         centerPoint = new Point2D.Double(location.x + images.get(NORMAL_SHIP).getWidth() / 2, location.y + images.get(NORMAL_SHIP).getHeight() / 2);
         
         state = State.idle;
-        accelerationVector = new Vector(0, 0);
+        accelerationVector = new Vector(0, faceAngle);
         faceAngle = 0;
-        velocityVector = new Vector(0, 360 - faceAngle);
+        velocityVector = new Vector(0, faceAngle);
     }
     
     enum State
@@ -47,6 +47,7 @@ public class Ship extends GameEntity
     {
         Point2D.Double p = new Point2D.Double(command.getDestination().x, command.getDestination().y);
         faceAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, p);
+        velocityVector.setDirectionAndMagnitude(2, faceAngle);
         //System.out.println(faceAngle);
     }
     
@@ -55,14 +56,10 @@ public class Ship extends GameEntity
         velocityVector = velocityVector.add(accelerationVector);
         location.x += velocityVector.getComponents().getX();
         location.y += velocityVector.getComponents().getY();
-        double initalAngle = faceAngle;
-        velocityVector.setDirectionAndMagnitude(360 - faceAngle, 0);
-        faceAngle++;
-        double deltaTheta = faceAngle - initalAngle;
         
-        Point2D.Double boundingRectLocation = new Point2D.Double(boundingRect.getX(), boundingRect.getY());
-        Point2D.Double newBoundingRectCoords = Calculator.rotatePointAroundPoint(boundingRectLocation, centerPoint, deltaTheta);
-        boundingRect.setFrame(newBoundingRectCoords, new Dimension((int)boundingRect.getHeight(), (int)boundingRect.getWidth()));
+        centerPoint.setLocation(location.x + imageSize.getWidth(), location.y + imageSize.getHeight());
+
+        boundingRect.setFrame(location, new Dimension((int)boundingRect.getHeight(), (int)boundingRect.getWidth()));
     }
     
     @Override
@@ -72,7 +69,7 @@ public class Ship extends GameEntity
         AffineTransform transform = (AffineTransform)original.clone();
         
         transform.translate(location.x, location.y);
-        transform.rotate(Math.toRadians(Calculator.convertAngleForAffineTransform(faceAngle)), imageSize.getWidth(), imageSize.getHeight());
+        transform.rotate(Math.toRadians(Calculator.convertAngleForAffineTransform(faceAngle)), imageSize.getWidth() / 2, imageSize.getHeight() / 2);
         
         g2d.transform(transform);
         switch (state)
@@ -85,8 +82,8 @@ public class Ship extends GameEntity
                 break;
         }
         g2d.setTransform(original);
-        g2d.draw(boundingRect);
-        //g2d.fillRect((int)(centerPoint.x), (int)(centerPoint.y), 2, 2);
+        //g2d.draw(boundingRect);
+        //g2d.fillRect((int)(imageSize.getWidth()), (int)(imageSize.getHeight()), 2, 2);
     }
     
     public boolean checkMousePressed(Point location)

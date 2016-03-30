@@ -26,13 +26,14 @@ public class Vector
     
     private void setComponents()
     {
-        components.x = magnitude * Math.cos(Math.toRadians(direction));
-        components.y = magnitude * Math.sin(Math.toRadians(direction));
+        components.x = magnitude * Math.cos(Math.toRadians(360 - direction));
+        components.y = magnitude * Math.sin(Math.toRadians(360 - direction));
     }
     
     public void setComponents(Point2D.Double components)
     {
         this.components = components;
+        setDirectionAndMagnitude();
     }
     
     private void setDirectionAndMagnitude()
@@ -45,6 +46,7 @@ public class Vector
     {
         this.magnitude = magnitude;
         this.direction = direction;
+        setComponents();
     }
     
     public Point2D.Double getComponents()
