@@ -16,6 +16,8 @@ public class Ship extends GameEntity
     private Vector velocityVector;
     private Vector accelerationVector;
     private double faceAngle;
+    private double targetAngle = 0;
+    private RotationDirection directionToRotate = RotationDirection.idle;
     
     private final Dimension imageSize = new Dimension();
     
@@ -37,6 +39,13 @@ public class Ship extends GameEntity
         velocityVector = new Vector(0, faceAngle);
     }
     
+    enum RotationDirection
+    {
+        idle,
+        positive,
+        negative
+    }
+    
     enum State
     {
         idle,
@@ -46,16 +55,56 @@ public class Ship extends GameEntity
     public void move(MovementCommand command)
     {
         Point2D.Double p = new Point2D.Double(command.getDestination().x, command.getDestination().y);
-        faceAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, p);
+        targetAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, p);
+
+        double[] angleDistances = Calculator.getDistancesBetweenAngles(faceAngle, targetAngle);
+        
+        directionToRotate = angleDistances[0] < angleDistances[1] ? RotationDirection.positive : RotationDirection.negative;
+
         velocityVector.setDirectionAndMagnitude(2, faceAngle);
+        
         //System.out.println(faceAngle);
     }
     
     public void update()
     {
         velocityVector = velocityVector.add(accelerationVector);
+        
+        System.out.println(Math.abs(faceAngle - targetAngle));
+        System.out.println(directionToRotate + "\n");
+        switch(directionToRotate)
+        {
+            case positive:
+                faceAngle++;
+                faceAngle = Calculator.normalizeAngle(faceAngle);
+                
+                if (Math.abs(faceAngle - targetAngle) <= 1)
+                {
+                    directionToRotate = RotationDirection.idle;
+                }
+                else
+                {
+                    directionToRotate = RotationDirection.positive;
+                }
+                
+                break;
+            case negative:
+                faceAngle--;
+                faceAngle = Calculator.normalizeAngle(faceAngle);
+                if (Math.abs(faceAngle - targetAngle) <= 1)
+                {
+                    directionToRotate = RotationDirection.idle;
+                }
+                else
+                {
+                    directionToRotate = RotationDirection.negative;
+                }
+                
+                break;
+        }
+        velocityVector.setDirectionAndMagnitude(velocityVector.getDirectionAndMagnitude().y, faceAngle);
         location.x += velocityVector.getComponents().getX();
-        location.y += velocityVector.getComponents().getY();
+        location.y += velocityVector.getComponents().getY();        
         
         centerPoint.setLocation(location.x + imageSize.getWidth(), location.y + imageSize.getHeight());
 

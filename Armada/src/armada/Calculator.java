@@ -63,4 +63,21 @@ public class Calculator
         
         return new Point2D.Double(newX, newY);
     }
+    
+    // gives the two possible angle changes to advance the current angle to the target angle
+    // first element is if the instance rotates in the positive direction
+    // second element is if the instance rotates in the negative direction
+    public static double[] getDistancesBetweenAngles(double currentAngle, double targetAngle) 
+    {
+        if (targetAngle > currentAngle)
+        {
+            return new double[] {targetAngle - currentAngle, 360 - (targetAngle - currentAngle)};
+            
+        } else if (currentAngle > targetAngle)
+        {
+            return new double[] {360 - (currentAngle - targetAngle), currentAngle - targetAngle };
+        }
+        
+        return new double[] {0.0, 360};
+    }
 }
