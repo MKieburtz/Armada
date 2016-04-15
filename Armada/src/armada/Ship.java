@@ -10,16 +10,23 @@ public class Ship extends GameEntity
 {  
     private final int NORMAL_SHIP = 0;
     private final int SELECTED_SHIP = 1; 
+    private final Dimension imageSize = new Dimension();
+
     private State state;
     private final Rectangle2D.Double boundingRect;
     private final Point2D.Double centerPoint;
+    
     private Vector velocityVector;
+    private final int MAX_VELOCITY = 4;
     private Vector accelerationVector;
+    private final double MAX_POSITIVE_ACCELERATION = .1;
+    private final double MAX_NEGATIVE_ACCELERATION = -.2;
     private double faceAngle;
+    
     private double targetAngle = 0;
+    private Point2D.Double targetPoint = new Point2D.Double(-1, -1);
     private RotationDirection directionToRotate = RotationDirection.idle;
     
-    private final Dimension imageSize = new Dimension();
     
     public Ship(Point2D.Double location)
     {
@@ -54,24 +61,26 @@ public class Ship extends GameEntity
     
     public void move(MovementCommand command)
     {
-        Point2D.Double p = new Point2D.Double(command.getDestination().x, command.getDestination().y);
-        targetAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, p);
-
+        targetPoint = new Point2D.Double(command.getDestination().x, command.getDestination().y);
+        calculcateTargetAngle(targetPoint);
+        velocityVector.setDirectionAndMagnitude(4, faceAngle);
+    }
+    
+    private void calculcateTargetAngle(Point2D.Double targetPoint)
+    {
+        targetAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, targetPoint);
         double[] angleDistances = Calculator.getDistancesBetweenAngles(faceAngle, targetAngle);
-        
         directionToRotate = angleDistances[0] < angleDistances[1] ? RotationDirection.positive : RotationDirection.negative;
-
-        velocityVector.setDirectionAndMagnitude(2, faceAngle);
-        
-        //System.out.println(faceAngle);
     }
     
     public void update()
     {
         velocityVector = velocityVector.add(accelerationVector);
         
-        System.out.println(Math.abs(faceAngle - targetAngle));
-        System.out.println(directionToRotate + "\n");
+        if (!targetPoint.equals(new Point2D.Double(-1, -1)))
+        {
+            calculcateTargetAngle(targetPoint);
+        }
         switch(directionToRotate)
         {
             case positive:
@@ -81,6 +90,7 @@ public class Ship extends GameEntity
                 if (Math.abs(faceAngle - targetAngle) <= 1)
                 {
                     directionToRotate = RotationDirection.idle;
+                    targetPoint.setLocation(-1, -1);
                 }
                 else
                 {
@@ -94,6 +104,7 @@ public class Ship extends GameEntity
                 if (Math.abs(faceAngle - targetAngle) <= 1)
                 {
                     directionToRotate = RotationDirection.idle;
+                    targetPoint.setLocation(-1, -1);
                 }
                 else
                 {
