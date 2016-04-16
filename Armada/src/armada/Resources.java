@@ -52,8 +52,8 @@ public class Resources
     
     public static enum GeneratedImagesType
     {
-        animatedInitBorder,
-        animatedHoritontalBorder
+        ANIMATED_INIT_BORDER,
+        ANIMATED_HORIZONTAL_BORDER
     }
     
     private void generateImages()
@@ -83,7 +83,7 @@ public class Resources
             g2d.dispose();
         }
         // add the images
-        generatedImages.put(GeneratedImagesType.animatedInitBorder, initImages);
+        generatedImages.put(GeneratedImagesType.ANIMATED_INIT_BORDER, initImages);
         
         // then generate the top borders
         BufferedImage[] horizontalBorders = new BufferedImage[79];
@@ -111,7 +111,7 @@ public class Resources
         }
         
         // add the images
-        generatedImages.put(GeneratedImagesType.animatedHoritontalBorder, horizontalBorders);
+        generatedImages.put(GeneratedImagesType.ANIMATED_HORIZONTAL_BORDER, horizontalBorders);
     }
     
     public BufferedImage[] getGeneratedImagesForObject(GeneratedImagesType type)

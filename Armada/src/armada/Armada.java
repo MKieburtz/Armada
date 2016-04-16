@@ -23,7 +23,7 @@ public class Armada implements GameActionListener
     private ArrayList<Ship> ships = new ArrayList<>();
     private ArrayList<Ship> selectedShips = new ArrayList<>();
     
-    private GameState state = GameState.opening;
+    private GameState state = GameState.OPENING;
     
     private int framesDrawn = 0;
     private int FPS = 0;
@@ -43,7 +43,7 @@ public class Armada implements GameActionListener
         DrawingData.setFps(0);
         addShips();
         DrawingData.setShips(ships);
-        state = GameState.opening;
+        state = GameState.OPENING;
         drawingTimer.schedule(new DrawingService(), 0, TimeUnit.MILLISECONDS);
         updatingTimer.schedule(new UpdateService(), 0, TimeUnit.MILLISECONDS);
         fpsRecorder.schedule(new RecorderService(), 0, TimeUnit.MILLISECONDS);
@@ -60,22 +60,22 @@ public class Armada implements GameActionListener
     @Override
     public void doneOpening() 
     {
-        state = GameState.mainMenu;
+        state = GameState.MAIN_MENU;
     }
     
     @Override
     public void startButtonPressed()
     {
-        state = GameState.playing;
+        state = GameState.PLAYING;
     }
     
     @Override
     public void mousePressed(MouseEvent e) 
     {        switch (state)
         {
-            case mainMenu:
+            case MAIN_MENU:
                 break;
-            case playing:
+            case PLAYING:
                     if (e.getButton() == 1)
                     {
                         DrawingData.setSelectionRect(selectionRect);
@@ -121,10 +121,10 @@ public class Armada implements GameActionListener
     {
         switch (state)
         {
-            case mainMenu:
+            case MAIN_MENU:
                     window.checkMouseMovedForMainMenu(e);
                 break;
-            case playing:
+            case PLAYING:
                 break;
         }
     }
@@ -134,9 +134,9 @@ public class Armada implements GameActionListener
     {
         switch (state)
         {
-            case mainMenu:
+            case MAIN_MENU:
                 break;
-            case playing:
+            case PLAYING:
                 if (SwingUtilities.isLeftMouseButton(e))
                 {
                     if (selectionRect.isActive())
@@ -174,10 +174,10 @@ public class Armada implements GameActionListener
     {
         switch (state)
         {
-            case mainMenu:
+            case MAIN_MENU:
                     window.CheckMousePressedForMainMenu(e);
                 break;
-            case playing:
+            case PLAYING:
                     selectionRect.deactivateRect();
                     DrawingData.setSelectionRect(selectionRect);
                 break;
@@ -189,7 +189,7 @@ public class Armada implements GameActionListener
         @Override
         public void run() 
         {
-            if (state == GameState.playing)
+            if (state == GameState.PLAYING)
             {
                 for (Ship s : ships)
                 {

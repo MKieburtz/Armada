@@ -23,7 +23,7 @@ public class MainMenu
     
     enum Buttons
     {
-        start
+        START
     }
     
     public MainMenu(GameActionListener actionListener)
@@ -39,11 +39,11 @@ public class MainMenu
     
     public void setButtonRects()
     {
-        buttonRects.put(Buttons.start, new Rectangle2D.Double(DrawingData.getScreenSize().width / 2 - StartButtonDimensions.width / 2,
+        buttonRects.put(Buttons.START, new Rectangle2D.Double(DrawingData.getScreenSize().width / 2 - StartButtonDimensions.width / 2,
                 DrawingData.getScreenSize().height / 2 - StartButtonDimensions.height / 2,
                 StartButtonDimensions.width,
                 StartButtonDimensions.height));
-        buttonHovers.put(Buttons.start, false);
+        buttonHovers.put(Buttons.START, false);
     }
     
     private final float backgroundOpacity = .1f;
@@ -65,7 +65,7 @@ public class MainMenu
         
         g2d.setTransform(transform);
         
-        g2d.drawImage(images.get(buttonHovers.get(Buttons.start) ? START_BUTTON_HOVER : START_BUTTON_NO_HOVER), 0, 0, null);
+        g2d.drawImage(images.get(buttonHovers.get(Buttons.START) ? START_BUTTON_HOVER : START_BUTTON_NO_HOVER), 0, 0, null);
         
         g2d.setTransform(originalTransform);
         //g2d.draw(buttonRects.get(Buttons.start));
@@ -73,7 +73,7 @@ public class MainMenu
     
     public void checkMousePressed(Point location)
     {
-        if (buttonRects.get(Buttons.start).contains(location))
+        if (buttonRects.get(Buttons.START).contains(location))
         {
             gameActionListener.startButtonPressed();
         }
@@ -81,13 +81,13 @@ public class MainMenu
     
     public void checkMouseMoved(Point location)
     {
-        if (buttonRects.get(Buttons.start).contains(location))
+        if (buttonRects.get(Buttons.START).contains(location))
         {
-            buttonHovers.replace(Buttons.start, true);
+            buttonHovers.replace(Buttons.START, true);
         }
         else
         {
-            buttonHovers.replace(Buttons.start, false);
+            buttonHovers.replace(Buttons.START, false);
         }
     }
 }

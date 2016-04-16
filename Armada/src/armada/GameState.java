@@ -5,7 +5,7 @@ package armada;
  */
 public enum GameState 
 {
-    opening,
-    mainMenu,
-    playing
+    OPENING,
+    MAIN_MENU,
+    PLAYING
 }

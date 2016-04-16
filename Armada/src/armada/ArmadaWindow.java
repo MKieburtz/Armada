@@ -37,8 +37,8 @@ public class ArmadaWindow extends JFrame
         DrawingData.setVerticalBorder(images.get(0));
         DrawingData.setHorizontalBorder(images.get(1));
         DrawingData.setInitBorder(images.get(2));
-        initBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.animatedInitBorder);
-        horizontalBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.animatedHoritontalBorder);
+        initBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.ANIMATED_INIT_BORDER);
+        horizontalBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.ANIMATED_HORIZONTAL_BORDER);
         DrawingData.setHorizontalBorderFrames(horizontalBorderFrames);
         DrawingData.setInitBorderFrames(initBorderFrames);
         panel = new Panel();
@@ -150,16 +150,16 @@ public class ArmadaWindow extends JFrame
         
         switch (state)
         {
-            case opening:
+            case OPENING:
                 if (renderer.drawInitBorders(panel.getGraphics()))
                 {
                     gameActionListener.doneOpening();
                 }
                 break;
-            case mainMenu:
+            case MAIN_MENU:
                 renderer.drawMainMenu(panel.getGraphics(), mainMenu);
                 break;
-            case playing:
+            case PLAYING:
                 renderer.drawScreen(panel.getGraphics());
                 break;
         }

@@ -12,20 +12,22 @@ public class Ship extends GameEntity
     private final int SELECTED_SHIP = 1; 
     private final Dimension imageSize = new Dimension();
 
-    private State state;
+    private SelectionState state;
     private final Rectangle2D.Double boundingRect;
     private final Point2D.Double centerPoint;
     
     private Vector velocityVector;
-    private final int MAX_VELOCITY = 4;
     private Vector accelerationVector;
+    private final int MAX_VELOCITY = 4;
     private final double MAX_POSITIVE_ACCELERATION = .1;
     private final double MAX_NEGATIVE_ACCELERATION = -.2;
+    
     private double faceAngle;
+    private double angularVelocity;
+    private double angularAcceleration;
     
     private double targetAngle = 0;
     private Point2D.Double targetPoint = new Point2D.Double(-1, -1);
-    private RotationDirection directionToRotate = RotationDirection.idle;
     
     
     public Ship(Point2D.Double location)
@@ -40,23 +42,40 @@ public class Ship extends GameEntity
         boundingRect = new Rectangle2D.Double(location.x, location.y, images.get(NORMAL_SHIP).getWidth(), images.get(NORMAL_SHIP).getHeight());
         centerPoint = new Point2D.Double(location.x + images.get(NORMAL_SHIP).getWidth() / 2, location.y + images.get(NORMAL_SHIP).getHeight() / 2);
         
-        state = State.idle;
+        state = SelectionState.IDLE;
         accelerationVector = new Vector(0, faceAngle);
         faceAngle = 0;
         velocityVector = new Vector(0, faceAngle);
+        angularAcceleration = .1;
+    }
+    
+    
+    enum SelectionState
+    {
+        IDLE,
+        SELECTED
+    }
+    
+    enum MovementState
+    {
+        IDLE,
+        CONSTANT,
+        SLOWING_DOWN,
+        SPEEDING_UP,
     }
     
     enum RotationDirection
     {
-        idle,
-        positive,
-        negative
+        IDLE,
+        RIGHT,
+        LEFT
     }
     
-    enum State
+    enum RotationAcceleration
     {
-        idle,
-        selected
+        IDLE,
+        SLOWING_DOWN,
+        SPEEDING_UP
     }
     
     public void move(MovementCommand command)
@@ -70,49 +89,28 @@ public class Ship extends GameEntity
     {
         targetAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, targetPoint);
         double[] angleDistances = Calculator.getDistancesBetweenAngles(faceAngle, targetAngle);
-        directionToRotate = angleDistances[0] < angleDistances[1] ? RotationDirection.positive : RotationDirection.negative;
+        angularAcceleration = angleDistances[0] < angleDistances[1] ? MAX_POSITIVE_ACCELERATION : MAX_NEGATIVE_ACCELERATION;
     }
     
     public void update()
     {
         velocityVector = velocityVector.add(accelerationVector);
+
+//        if (!targetPoint.equals(new Point2D.Double(-1, -1)))
+//        {
+//            calculcateTargetAngle(targetPoint);
+//        }
+        angularVelocity += angularAcceleration;
+        faceAngle += angularVelocity;
+        faceAngle = Calculator.normalizeAngle(faceAngle);
         
-        if (!targetPoint.equals(new Point2D.Double(-1, -1)))
+        if (Math.abs(faceAngle - targetAngle) <= 1)
         {
-            calculcateTargetAngle(targetPoint);
+            angularAcceleration = 0;
+            angularVelocity = 0;
+            targetPoint.setLocation(-1, -1);
         }
-        switch(directionToRotate)
-        {
-            case positive:
-                faceAngle++;
-                faceAngle = Calculator.normalizeAngle(faceAngle);
                 
-                if (Math.abs(faceAngle - targetAngle) <= 1)
-                {
-                    directionToRotate = RotationDirection.idle;
-                    targetPoint.setLocation(-1, -1);
-                }
-                else
-                {
-                    directionToRotate = RotationDirection.positive;
-                }
-                
-                break;
-            case negative:
-                faceAngle--;
-                faceAngle = Calculator.normalizeAngle(faceAngle);
-                if (Math.abs(faceAngle - targetAngle) <= 1)
-                {
-                    directionToRotate = RotationDirection.idle;
-                    targetPoint.setLocation(-1, -1);
-                }
-                else
-                {
-                    directionToRotate = RotationDirection.negative;
-                }
-                
-                break;
-        }
         velocityVector.setDirectionAndMagnitude(velocityVector.getDirectionAndMagnitude().y, faceAngle);
         location.x += velocityVector.getComponents().getX();
         location.y += velocityVector.getComponents().getY();        
@@ -134,10 +132,10 @@ public class Ship extends GameEntity
         g2d.transform(transform);
         switch (state)
         {
-            case idle:
+            case IDLE:
                 g2d.drawImage(images.get(NORMAL_SHIP), 0, 0, null);
                 break;
-            case selected:
+            case SELECTED:
                 g2d.drawImage(images.get(SELECTED_SHIP), 0, 0, null);
                 break;
         }
@@ -150,12 +148,12 @@ public class Ship extends GameEntity
     {
         if (boundingRect.contains(location))
         {
-            state = State.selected;
+            state = SelectionState.SELECTED;
             return true;
         }
         else
         {
-            state = State.idle;
+            state = SelectionState.IDLE;
             return false;
         }
     }
@@ -167,11 +165,11 @@ public class Ship extends GameEntity
     
     public void select()
     {
-        state = State.selected;
+        state = SelectionState.SELECTED;
     }
     
     public void deSelect()
     {
-        state = State.idle;
+        state = SelectionState.IDLE;
     }
 }
