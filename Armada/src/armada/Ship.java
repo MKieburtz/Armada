@@ -13,6 +13,10 @@ public class Ship extends GameEntity
     private final Dimension imageSize = new Dimension();
 
     private SelectionState state;
+    private MovementState movementState;
+    private RotationDirection rotationDirection;
+    private RotationAccelerationState rotationAccelerationState;
+    
     private final Rectangle2D.Double boundingRect;
     private final Point2D.Double centerPoint;
     
@@ -46,7 +50,9 @@ public class Ship extends GameEntity
         accelerationVector = new Vector(0, faceAngle);
         faceAngle = 0;
         velocityVector = new Vector(0, faceAngle);
-        angularAcceleration = .1;
+        
+        angularAcceleration = 0;
+        angularVelocity = 0;
     }
     
     
@@ -71,11 +77,12 @@ public class Ship extends GameEntity
         LEFT
     }
     
-    enum RotationAcceleration
+    enum RotationAccelerationState
     {
         IDLE,
-        SLOWING_DOWN,
-        SPEEDING_UP
+        CONSTANT,
+        ACCELERATING_RIGHT,
+        ACCELERATING_LEFT
     }
     
     public void move(MovementCommand command)
@@ -94,8 +101,6 @@ public class Ship extends GameEntity
     
     public void update()
     {
-        velocityVector = velocityVector.add(accelerationVector);
-
 //        if (!targetPoint.equals(new Point2D.Double(-1, -1)))
 //        {
 //            calculcateTargetAngle(targetPoint);
@@ -103,14 +108,15 @@ public class Ship extends GameEntity
         angularVelocity += angularAcceleration;
         faceAngle += angularVelocity;
         faceAngle = Calculator.normalizeAngle(faceAngle);
+//        
+//        if (Math.abs(faceAngle - targetAngle) <= 1)
+//        {
+//            angularAcceleration = 0;
+//            angularVelocity = 0;
+//            targetPoint.setLocation(-1, -1);
+//        }
         
-        if (Math.abs(faceAngle - targetAngle) <= 1)
-        {
-            angularAcceleration = 0;
-            angularVelocity = 0;
-            targetPoint.setLocation(-1, -1);
-        }
-                
+        velocityVector = velocityVector.add(accelerationVector);        
         velocityVector.setDirectionAndMagnitude(velocityVector.getDirectionAndMagnitude().y, faceAngle);
         location.x += velocityVector.getComponents().getX();
         location.y += velocityVector.getComponents().getY();        
@@ -118,6 +124,56 @@ public class Ship extends GameEntity
         centerPoint.setLocation(location.x + imageSize.getWidth(), location.y + imageSize.getHeight());
 
         boundingRect.setFrame(location, new Dimension((int)boundingRect.getHeight(), (int)boundingRect.getWidth()));
+    }
+    
+    private void updateState()
+    {
+        if (Math.abs(velocityVector.getDirectionAndMagnitude().y) > 0 && accelerationVector.getDirectionAndMagnitude().y == 0)
+        {
+            movementState = MovementState.CONSTANT;
+        }
+        else if (accelerationVector.getDirectionAndMagnitude().y < 0)
+        {
+            movementState = MovementState.SLOWING_DOWN;
+        }
+        else if (accelerationVector.getDirectionAndMagnitude().y > 0)
+        {
+            movementState = MovementState.SPEEDING_UP;
+        }
+        else 
+        {
+            movementState = MovementState.IDLE;
+        }
+        //////////////////////////////////////////////////////////////
+        if (angularVelocity > 0)
+        {
+            rotationDirection = RotationDirection.LEFT;
+        }
+        else if (angularVelocity < 0)
+        {
+            rotationDirection = RotationDirection.RIGHT;
+        }
+        else
+        {
+            rotationDirection = RotationDirection.IDLE;
+        }
+        //////////////////////////////////////////////////////////////
+        if (angularVelocity > 0 && angularAcceleration == 0)
+        {
+            rotationAccelerationState = RotationAccelerationState.CONSTANT;
+        }
+        else if (angularAcceleration < 0)
+        {
+            rotationAccelerationState = RotationAccelerationState.ACCELERATING_RIGHT;
+        }
+        else if (angularAcceleration > 0)
+        {
+            rotationAccelerationState = RotationAccelerationState.ACCELERATING_LEFT;
+        }
+        else
+        {
+            rotationAccelerationState = RotationAccelerationState.IDLE;
+        }
     }
     
     @Override
