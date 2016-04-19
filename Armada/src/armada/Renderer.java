@@ -62,14 +62,8 @@ public class Renderer
         
         drawBorders(g2d);
 
-        Composite originalComposite = g2d.getComposite();
-        Composite comp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .1f);
-
-        g2d.setComposite(comp);
-        g2d.setColor(Color.GREEN);
-        g2d.fillRect(0, 0, DrawingData.getScreenSize().width, DrawingData.getScreenSize().height);
-        g2d.setComposite(originalComposite);
-
+        g2d.drawImage(DrawingData.getBackgroundImage(), 0, 0, null);
+        
         //drawDebugData(g2d);
         
         for (Ship s : DrawingData.getShips())
@@ -87,6 +81,7 @@ public class Renderer
     
     private void drawDebugData(Graphics2D g2d)
     {
+        g2d.setFont(dataFont);
         g2d.drawString("FPS: " + DrawingData.getFps(), 50, 50);
         g2d.drawString("UPS: " + DrawingData.getUPS(), 50, 100);
     }

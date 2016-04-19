@@ -43,6 +43,7 @@ public class Resources
         imagePaths.add("Resources/SelectedShip.png");
         imagePaths.add("Resources/StartButtonHover.png");
         imagePaths.add("Resources/StartButton.png");
+        imagePaths.add("Resources/Background.png");
         
         // load the images
         loadAllImages();

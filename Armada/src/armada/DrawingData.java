@@ -21,6 +21,18 @@ public class DrawingData
         ships = newShips;
     }
     ///////////////////////////////////////////////////////////////////
+    public static volatile BufferedImage backgroundImage;
+
+    public static BufferedImage getBackgroundImage() 
+    {
+        return backgroundImage;
+    }
+
+    public static void setBackgroundImage(BufferedImage newBackgroundImage) 
+    {
+        backgroundImage = newBackgroundImage;
+    }
+    ///////////////////////////////////////////////////////////////////
     public static volatile BufferedImage verticalBorder;
     
     public static BufferedImage getVerticalBorder()

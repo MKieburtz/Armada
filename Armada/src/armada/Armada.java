@@ -32,8 +32,8 @@ public class Armada implements GameActionListener
     
     public Armada()
     {
-        drawingTimer = Executors.newScheduledThreadPool(1);
-        updatingTimer = Executors.newScheduledThreadPool(1);
+        drawingTimer = Executors.newScheduledThreadPool(2);
+        updatingTimer = Executors.newScheduledThreadPool(2);
         fpsRecorder = Executors.newSingleThreadScheduledExecutor();
         resources = new Resources();
         GameData.initResources(resources);
@@ -197,7 +197,7 @@ public class Armada implements GameActionListener
                 }
             }
             updates++;
-            drawingTimer.schedule(new UpdateService(), 10, TimeUnit.MILLISECONDS);
+            updatingTimer.schedule(new UpdateService(), 13200, TimeUnit.MICROSECONDS); // 13.2 miliseconds
         }
     }
     
@@ -211,9 +211,12 @@ public class Armada implements GameActionListener
                 @Override
                 public void run() 
                 {
+                    //long start = System.currentTimeMillis();
                     window.draw(state);
+                    //long end = System.currentTimeMillis();
+                    //System.out.println(end - start);
                     framesDrawn++;
-                    drawingTimer.schedule(new DrawingService(), 1, TimeUnit.MILLISECONDS);
+                    drawingTimer.schedule(new DrawingService(), 0, TimeUnit.MILLISECONDS);
                 }
             });
         }
@@ -230,6 +233,8 @@ public class Armada implements GameActionListener
             updates = 0;
             DrawingData.setFps(FPS);
             DrawingData.setUPS(UPS);
+            //System.out.println(FPS);
+            //System.out.println(UPS);
             fpsRecorder.schedule(new RecorderService(), 1, TimeUnit.SECONDS);
         }
     }

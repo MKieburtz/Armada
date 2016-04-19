@@ -12,10 +12,10 @@ public class Ship extends GameEntity
     private final int SELECTED_SHIP = 1; 
     private final Dimension imageSize = new Dimension();
 
-    private SelectionState state;
+    private SelectionState selectionState;
     private MovementState movementState;
     private RotationDirection rotationDirection;
-    private RotationAccelerationState rotationAccelerationState;
+    private RotationState rotationState;
     
     private final Rectangle2D.Double boundingRect;
     private final Point2D.Double centerPoint;
@@ -46,12 +46,12 @@ public class Ship extends GameEntity
         boundingRect = new Rectangle2D.Double(location.x, location.y, images.get(NORMAL_SHIP).getWidth(), images.get(NORMAL_SHIP).getHeight());
         centerPoint = new Point2D.Double(location.x + images.get(NORMAL_SHIP).getWidth() / 2, location.y + images.get(NORMAL_SHIP).getHeight() / 2);
         
-        state = SelectionState.IDLE;
+        selectionState = SelectionState.IDLE;
         accelerationVector = new Vector(0, faceAngle);
         faceAngle = 0;
-        velocityVector = new Vector(0, faceAngle);
+        velocityVector = new Vector(5, faceAngle);
         
-        angularAcceleration = 0;
+        angularAcceleration = -.01;
         angularVelocity = 0;
     }
     
@@ -77,7 +77,7 @@ public class Ship extends GameEntity
         LEFT
     }
     
-    enum RotationAccelerationState
+    enum RotationState
     {
         IDLE,
         CONSTANT,
@@ -118,6 +118,10 @@ public class Ship extends GameEntity
         
         velocityVector = velocityVector.add(accelerationVector);        
         velocityVector.setDirectionAndMagnitude(velocityVector.getDirectionAndMagnitude().y, faceAngle);
+        
+        updateState();
+        //printStates();
+        
         location.x += velocityVector.getComponents().getX();
         location.y += velocityVector.getComponents().getY();        
         
@@ -160,20 +164,28 @@ public class Ship extends GameEntity
         //////////////////////////////////////////////////////////////
         if (angularVelocity > 0 && angularAcceleration == 0)
         {
-            rotationAccelerationState = RotationAccelerationState.CONSTANT;
+            rotationState = RotationState.CONSTANT;
         }
         else if (angularAcceleration < 0)
         {
-            rotationAccelerationState = RotationAccelerationState.ACCELERATING_RIGHT;
+            rotationState = RotationState.ACCELERATING_RIGHT;
         }
         else if (angularAcceleration > 0)
         {
-            rotationAccelerationState = RotationAccelerationState.ACCELERATING_LEFT;
+            rotationState = RotationState.ACCELERATING_LEFT;
         }
         else
         {
-            rotationAccelerationState = RotationAccelerationState.IDLE;
+            rotationState = RotationState.IDLE;
         }
+    }
+    
+    private void printStates()
+    {
+        System.out.println("selection: " + selectionState);
+        System.out.println("movement: " + movementState);
+        System.out.println("rotation direction: " + rotationDirection);
+        System.out.println("rotation state: " + rotationState + "\n");
     }
     
     @Override
@@ -186,7 +198,7 @@ public class Ship extends GameEntity
         transform.rotate(Math.toRadians(Calculator.convertAngleForAffineTransform(faceAngle)), imageSize.getWidth() / 2, imageSize.getHeight() / 2);
         
         g2d.transform(transform);
-        switch (state)
+        switch (selectionState)
         {
             case IDLE:
                 g2d.drawImage(images.get(NORMAL_SHIP), 0, 0, null);
@@ -204,12 +216,12 @@ public class Ship extends GameEntity
     {
         if (boundingRect.contains(location))
         {
-            state = SelectionState.SELECTED;
+            selectionState = SelectionState.SELECTED;
             return true;
         }
         else
         {
-            state = SelectionState.IDLE;
+            selectionState = SelectionState.IDLE;
             return false;
         }
     }
@@ -221,11 +233,11 @@ public class Ship extends GameEntity
     
     public void select()
     {
-        state = SelectionState.SELECTED;
+        selectionState = SelectionState.SELECTED;
     }
     
     public void deSelect()
     {
-        state = SelectionState.IDLE;
+        selectionState = SelectionState.IDLE;
     }
 }

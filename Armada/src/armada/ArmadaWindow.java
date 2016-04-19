@@ -32,11 +32,13 @@ public class ArmadaWindow extends JFrame
         imagePaths.add("Resources/TopBorder.png");
         imagePaths.add("Resources/InitBorder.png");
         imagePaths.add("Resources/InitVerticalBorder.png");
+        imagePaths.add("Resources/Background.png");
         
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
         DrawingData.setVerticalBorder(images.get(0));
         DrawingData.setHorizontalBorder(images.get(1));
         DrawingData.setInitBorder(images.get(2));
+        DrawingData.setBackgroundImage(images.get(4));
         initBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.ANIMATED_INIT_BORDER);
         horizontalBorderFrames = GameData.getResources().getGeneratedImagesForObject(Resources.GeneratedImagesType.ANIMATED_HORIZONTAL_BORDER);
         DrawingData.setHorizontalBorderFrames(horizontalBorderFrames);
