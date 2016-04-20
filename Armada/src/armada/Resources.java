@@ -32,6 +32,8 @@ public class Resources
     private final int INIT_BORDER_HEIGHT = 2000;
     private final int INIT_BORDER_WIDTH = 15;
     
+    private final int BACKGROUND_INDEX = 8;
+    
     public Resources()
     {
         // for HUD
@@ -105,7 +107,6 @@ public class Resources
             clippingArea.subtract(new Area(clipping));
             
             Graphics2D g2d = horizontalBorders[i].createGraphics();
-            
             g2d.clip(clippingArea);
             g2d.drawImage(new ArrayList<>(images.values()).get(TOP_BORDER_INDEX), 0, 0, null);
             g2d.dispose();
@@ -113,7 +114,25 @@ public class Resources
         
         // add the images
         generatedImages.put(GeneratedImagesType.ANIMATED_HORIZONTAL_BORDER, horizontalBorders);
+        
+        // crop the background image
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        BufferedImage newImage = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_ARGB);
+        
+        Rectangle totalArea = new Rectangle(images.get(imagePaths.get(BACKGROUND_INDEX)).getWidth(), images.get(imagePaths.get(BACKGROUND_INDEX)).getHeight());
+        Rectangle clipping = new Rectangle(screenSize);
+        Area clippingArea = new Area(totalArea);
+        clippingArea.intersect(new Area(clipping));
+        
+        Graphics2D g2d = newImage.createGraphics();
+        
+        g2d.clip(clippingArea);
+        g2d.drawImage(images.get(imagePaths.get(BACKGROUND_INDEX)), 0, 0, null);
+        g2d.dispose();
+        images.replace(imagePaths.get(BACKGROUND_INDEX), newImage);
+        System.out.println(images.get(imagePaths.get(BACKGROUND_INDEX)).getWidth());
     }
+   
     
     public BufferedImage[] getGeneratedImagesForObject(GeneratedImagesType type)
     {
