@@ -41,14 +41,22 @@ public class Resources
         imagePaths.add("Resources/TopBorder.png");
         imagePaths.add("Resources/InitBorder.png");
         imagePaths.add("Resources/InitVerticalBorder.png");
+        
+        //ship
         imagePaths.add("Resources/Ship.png");
         imagePaths.add("Resources/SelectedShip.png");
+        
+        //buttons
         imagePaths.add("Resources/StartButtonHover.png");
         imagePaths.add("Resources/StartButton.png");
+        
+        // other stuff
         imagePaths.add("Resources/Background.png");
         
+        fontData.add(new FontInfo("Resources/Orbitron-Regular.ttf", 12f));
+        
         // load the images
-        loadAllImages();
+        loadAllResources();
         
         generateImages();
     }
@@ -130,7 +138,6 @@ public class Resources
         g2d.drawImage(images.get(imagePaths.get(BACKGROUND_INDEX)), 0, 0, null);
         g2d.dispose();
         images.replace(imagePaths.get(BACKGROUND_INDEX), newImage);
-        System.out.println(images.get(imagePaths.get(BACKGROUND_INDEX)).getWidth());
     }
    
     
@@ -186,16 +193,26 @@ public class Resources
         return fontsToReturn;
     }
     
-    public Font getFontForObject(String path)
+    public Font getFontForObject(FontInfo info)
     {
-        return fonts.get(path);
+        return fonts.get(info);
     }
     
-    private void loadAllImages() 
+    private void loadAllResources() 
     {
         for (String s : imagePaths) 
         {
             images.put(s, loader.loadImage(s));
+        }
+        
+        for (String s : soundPaths) 
+        {
+            sounds.put(s, loader.loadSound(s));
+        }
+        
+        for (FontInfo info : fontData) 
+        {
+            fonts.put(info, loader.loadFont(info.path, info.size));
         }
     }
 }

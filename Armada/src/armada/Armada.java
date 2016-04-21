@@ -233,7 +233,7 @@ public class Armada implements GameActionListener
             updates = 0;
             DrawingData.setFps(FPS);
             DrawingData.setUPS(UPS);
-            System.out.println(FPS);
+            //System.out.println(FPS);
             //System.out.println(UPS);
             fpsRecorder.schedule(new RecorderService(), 1, TimeUnit.SECONDS);
         }

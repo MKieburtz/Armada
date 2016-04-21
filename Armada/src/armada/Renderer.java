@@ -21,7 +21,8 @@ public class Renderer
     
     private BufferedImage drawingImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
     
-    private final Font dataFont = new Font("SansSerif", Font.PLAIN, 10);
+    private final FontInfo dataFontInfo = new FontInfo("Resources/Orbitron-Regular.ttf", 12f);
+    private final Font dataFont;
     
     public Renderer(boolean isMac, Dimension windowSize)
     {
@@ -35,6 +36,8 @@ public class Renderer
         INIT_BORDER_OFFSET_VERT = -30;
         numInitFrames = (int)Math.ceil(windowSize.getHeight() / 25);
         numHorizontalFrames = (int)Math.ceil(windowSize.getWidth() / 25) + 1;
+        
+        dataFont = GameData.getResources().getFontForObject(dataFontInfo);
     }
     
     public void sizeChanged() 
@@ -64,7 +67,7 @@ public class Renderer
 
         g2d.drawImage(DrawingData.getBackgroundImage(), 0, 0, null);
         
-        //drawDebugData(g2d);
+        drawDebugData(g2d);
         
         for (Ship s : DrawingData.getShips())
         {
@@ -74,13 +77,15 @@ public class Renderer
         {
             DrawingData.getSelectionRect().draw(g2d);
         }
-        g2d.dispose();
+        
         g.drawImage(drawingImage, 0, 0, null);
+        g2d.dispose();
         g.dispose();
     }
     
     private void drawDebugData(Graphics2D g2d)
     {
+        g2d.setColor(Color.RED);
         g2d.setFont(dataFont);
         g2d.drawString("FPS: " + DrawingData.getFps(), 50, 50);
         g2d.drawString("UPS: " + DrawingData.getUPS(), 50, 100);
