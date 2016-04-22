@@ -23,8 +23,7 @@ public class Ship extends GameEntity
     private Vector velocityVector;
     private Vector accelerationVector;
     private final int MAX_VELOCITY = 4;
-    private final double MAX_POSITIVE_ACCELERATION = .1;
-    private final double MAX_NEGATIVE_ACCELERATION = -.2;
+    private final double MAX_ACCELERATION = .1;
     
     private double faceAngle;
     private double angularVelocity;
@@ -49,9 +48,9 @@ public class Ship extends GameEntity
         selectionState = SelectionState.IDLE;
         accelerationVector = new Vector(0, faceAngle);
         faceAngle = 0;
-        velocityVector = new Vector(5, faceAngle);
+        velocityVector = new Vector(0, faceAngle);
         
-        angularAcceleration = -.01;
+        angularAcceleration = 0;
         angularVelocity = 0;
     }
     
@@ -96,7 +95,7 @@ public class Ship extends GameEntity
     {
         targetAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, targetPoint);
         double[] angleDistances = Calculator.getDistancesBetweenAngles(faceAngle, targetAngle);
-        angularAcceleration = angleDistances[0] < angleDistances[1] ? MAX_POSITIVE_ACCELERATION : MAX_NEGATIVE_ACCELERATION;
+        angularAcceleration = angleDistances[0] < angleDistances[1] ? MAX_ACCELERATION : -MAX_ACCELERATION;
     }
     
     public void update()
@@ -108,13 +107,12 @@ public class Ship extends GameEntity
         angularVelocity += angularAcceleration;
         faceAngle += angularVelocity;
         faceAngle = Calculator.normalizeAngle(faceAngle);
-//        
-//        if (Math.abs(faceAngle - targetAngle) <= 1)
-//        {
-//            angularAcceleration = 0;
-//            angularVelocity = 0;
-//            targetPoint.setLocation(-1, -1);
-//        }
+        
+        if (Math.abs(faceAngle - targetAngle) <= 1)
+        {
+            angularAcceleration = 0;
+            angularVelocity = 0;
+        }
         
         velocityVector = velocityVector.add(accelerationVector);        
         velocityVector.setDirectionAndMagnitude(velocityVector.getDirectionAndMagnitude().y, faceAngle);

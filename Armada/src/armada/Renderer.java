@@ -64,7 +64,7 @@ public class Renderer
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
         drawBorders(g2d);
-
+        
         g2d.drawImage(DrawingData.getBackgroundImage(), 0, 0, null);
         
         drawDebugData(g2d);
@@ -73,6 +73,7 @@ public class Renderer
         {
             s.draw(g2d);
         }
+        
         if (DrawingData.getSelectionRect().isActive())
         {
             DrawingData.getSelectionRect().draw(g2d);
@@ -88,7 +89,7 @@ public class Renderer
         g2d.setColor(Color.RED);
         g2d.setFont(dataFont);
         g2d.drawString("FPS: " + DrawingData.getFps(), 50, 50);
-        g2d.drawString("UPS: " + DrawingData.getUPS(), 50, 100);
+        g2d.drawString("UPS: " + DrawingData.getUPS(), 50, 75);
     }
     
     private int initBorderFrame = 0;
