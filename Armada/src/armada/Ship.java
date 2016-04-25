@@ -22,13 +22,18 @@ public class Ship extends GameEntity
     
     private Vector velocityVector;
     private Vector accelerationVector;
-    private final int MAX_VELOCITY = 4;
+    private final double MAX_VELOCITY = 4;
     private final double MAX_ACCELERATION = .1;
+    
+    private final double MAX_ANGULAR_VELOCITY = 3;
+    private final double MAX_ANGULAR_ACCELERATION = .1;
     
     private double faceAngle;
     private double angularVelocity;
     private double angularAcceleration;
     
+    private boolean rotatingToTarget = false;
+    private boolean movingToTarget = false;
     private double targetAngle = 0;
     private Point2D.Double targetPoint = new Point2D.Double(-1, -1);
     
@@ -86,6 +91,8 @@ public class Ship extends GameEntity
     
     public void move(MovementCommand command)
     {
+        rotatingToTarget = true;
+        movingToTarget = true;
         targetPoint = new Point2D.Double(command.getDestination().x, command.getDestination().y);
         calculcateTargetAngle(targetPoint);
         velocityVector.setDirectionAndMagnitude(4, faceAngle);
@@ -95,7 +102,7 @@ public class Ship extends GameEntity
     {
         targetAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, targetPoint);
         double[] angleDistances = Calculator.getDistancesBetweenAngles(faceAngle, targetAngle);
-        angularAcceleration = angleDistances[0] < angleDistances[1] ? MAX_ACCELERATION : -MAX_ACCELERATION;
+        angularVelocity = angleDistances[0] < angleDistances[1] ? MAX_ANGULAR_VELOCITY : -MAX_ANGULAR_VELOCITY;
     }
     
     public void update()
@@ -104,14 +111,27 @@ public class Ship extends GameEntity
 //        {
 //            calculcateTargetAngle(targetPoint);
 //        }
+        if (rotatingToTarget)
+        {
+            calculcateTargetAngle(targetPoint);
+        }
+        
         angularVelocity += angularAcceleration;
         faceAngle += angularVelocity;
         faceAngle = Calculator.normalizeAngle(faceAngle);
         
-        if (Math.abs(faceAngle - targetAngle) <= 1)
+        if (rotatingToTarget && Math.abs(faceAngle - targetAngle) <= 5)
         {
             angularAcceleration = 0;
             angularVelocity = 0;
+            rotatingToTarget = false;
+        }
+        
+        if (movingToTarget && Calculator.getDistance(location, targetPoint) < 30)
+        {
+            velocityVector.setDirectionAndMagnitude(0, 0);
+            accelerationVector.setDirectionAndMagnitude(0, 0);
+            movingToTarget = false;
         }
         
         velocityVector = velocityVector.add(accelerationVector);        

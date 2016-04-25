@@ -33,6 +33,13 @@ public class Calculator
         return angle;
     }
     
+    public static double getDistance(Point2D.Double pt1, Point2D.Double pt2)
+    {
+        double dx = Math.abs(pt2.x - pt1.x);
+        double dy = Math.abs(pt2.y - pt1.y);
+        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    }
+    
     // converts an angle in [0, 360] to and angle that makes sense the rotate method of AffineTransform     
     public static double convertAngleForAffineTransform(double angle)
     {
