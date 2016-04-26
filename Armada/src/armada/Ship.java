@@ -37,6 +37,8 @@ public class Ship extends GameEntity
     private double targetAngle = 0;
     private Point2D.Double targetPoint = new Point2D.Double(-1, -1);
     
+    private final FontInfo dataFontInfo = new FontInfo("Resources/Orbitron-Regular.ttf", 15f);
+    private final Font dataFont;
     
     public Ship(Point2D.Double location)
     {
@@ -46,6 +48,8 @@ public class Ship extends GameEntity
         images.addAll(GameData.getResources().getImagesForObject(imagePaths));
         
         imageSize.setSize(images.get(0).getWidth(), images.get(1).getHeight());
+        
+        dataFont = GameData.getResources().getFontForObject(dataFontInfo);
         
         boundingRect = new Rectangle2D.Double(location.x, location.y, images.get(NORMAL_SHIP).getWidth(), images.get(NORMAL_SHIP).getHeight());
         centerPoint = new Point2D.Double(location.x + images.get(NORMAL_SHIP).getWidth() / 2, location.y + images.get(NORMAL_SHIP).getHeight() / 2);
@@ -89,22 +93,6 @@ public class Ship extends GameEntity
         ACCELERATING_LEFT
     }
     
-    public void move(MovementCommand command)
-    {
-        rotatingToTarget = true;
-        movingToTarget = true;
-        targetPoint = new Point2D.Double(command.getDestination().x, command.getDestination().y);
-        calculcateTargetAngle(targetPoint);
-        velocityVector.setDirectionAndMagnitude(4, faceAngle);
-    }
-    
-    private void calculcateTargetAngle(Point2D.Double targetPoint)
-    {
-        targetAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, targetPoint);
-        double[] angleDistances = Calculator.getDistancesBetweenAngles(faceAngle, targetAngle);
-        angularVelocity = angleDistances[0] < angleDistances[1] ? MAX_ANGULAR_VELOCITY : -MAX_ANGULAR_VELOCITY;
-    }
-    
     public void update()
     {
 //        if (!targetPoint.equals(new Point2D.Double(-1, -1)))
@@ -120,7 +108,7 @@ public class Ship extends GameEntity
         faceAngle += angularVelocity;
         faceAngle = Calculator.normalizeAngle(faceAngle);
         
-        if (rotatingToTarget && Math.abs(faceAngle - targetAngle) <= 5)
+        if (rotatingToTarget && Math.abs(faceAngle - targetAngle) <= 2)
         {
             angularAcceleration = 0;
             angularVelocity = 0;
@@ -143,11 +131,64 @@ public class Ship extends GameEntity
         location.x += velocityVector.getComponents().getX();
         location.y += velocityVector.getComponents().getY();        
         
-        centerPoint.setLocation(location.x + imageSize.getWidth(), location.y + imageSize.getHeight());
+        centerPoint.setLocation(location.x + imageSize.getWidth() / 2, location.y + imageSize.getHeight() / 2);
 
         boundingRect.setFrame(location, new Dimension((int)boundingRect.getHeight(), (int)boundingRect.getWidth()));
     }
     
+    @Override
+    public void draw(Graphics2D g2d) 
+    {
+        AffineTransform original = g2d.getTransform();
+        AffineTransform transform = (AffineTransform)original.clone();
+        
+        transform.translate(location.x, location.y);
+        transform.rotate(Math.toRadians(Calculator.convertAngleForAffineTransform(faceAngle)), imageSize.getWidth() / 2, imageSize.getHeight() / 2);
+        
+        g2d.transform(transform);
+        switch (selectionState)
+        {
+            case IDLE:
+                g2d.drawImage(images.get(NORMAL_SHIP), 0, 0, null);
+                break;
+            case SELECTED:
+                g2d.drawImage(images.get(SELECTED_SHIP), 0, 0, null);
+                break;
+        }
+        g2d.setTransform(original);
+        
+        g2d.setColor(Color.CYAN);
+        g2d.fillRect((int)targetPoint.x, (int)targetPoint.y, 4, 4);
+        g2d.setColor(Color.GREEN);
+        g2d.drawLine((int)centerPoint.x, (int)centerPoint.y, (int)targetPoint.x, (int)targetPoint.y);
+        g2d.setColor(Color.RED);
+        Point2D.Double p = Calculator.rotatePointAroundPoint(new Point2D.Double(centerPoint.x + 200, centerPoint.y), centerPoint, faceAngle);
+        g2d.drawLine((int)centerPoint.x, (int)centerPoint.y, (int)p.x, (int)p.y);
+        g2d.setFont(dataFont);
+        g2d.drawString(String.valueOf((int)Calculator.getDistance(location, targetPoint)), (float)location.x - 20, (float)location.y - 20);
+        g2d.drawString(String.valueOf(faceAngle) + "\u00b0", (float)location.x + 50, (float)location.y + 50);
+        
+        
+        //g2d.draw(boundingRect);
+        //g2d.fillRect((int)(imageSize.getWidth()), (int)(imageSize.getHeight()), 2, 2);
+    }
+    
+    public void move(MovementCommand command)
+    {
+        rotatingToTarget = true;
+        movingToTarget = true;
+        targetPoint = new Point2D.Double(command.getDestination().x, command.getDestination().y);
+        calculcateTargetAngle(targetPoint);
+        velocityVector.setDirectionAndMagnitude(4, faceAngle);
+    }
+    
+    private void calculcateTargetAngle(Point2D.Double targetPoint)
+    {
+        targetAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, targetPoint);
+        double[] angleDistances = Calculator.getDistancesBetweenAngles(faceAngle, targetAngle);
+        angularVelocity = angleDistances[0] < angleDistances[1] ? MAX_ANGULAR_VELOCITY : -MAX_ANGULAR_VELOCITY;
+    }
+
     private void updateState()
     {
         if (Math.abs(velocityVector.getDirectionAndMagnitude().y) > 0 && accelerationVector.getDirectionAndMagnitude().y == 0)
@@ -204,30 +245,6 @@ public class Ship extends GameEntity
         System.out.println("movement: " + movementState);
         System.out.println("rotation direction: " + rotationDirection);
         System.out.println("rotation state: " + rotationState + "\n");
-    }
-    
-    @Override
-    public void draw(Graphics2D g2d) 
-    {
-        AffineTransform original = g2d.getTransform();
-        AffineTransform transform = (AffineTransform)original.clone();
-        
-        transform.translate(location.x, location.y);
-        transform.rotate(Math.toRadians(Calculator.convertAngleForAffineTransform(faceAngle)), imageSize.getWidth() / 2, imageSize.getHeight() / 2);
-        
-        g2d.transform(transform);
-        switch (selectionState)
-        {
-            case IDLE:
-                g2d.drawImage(images.get(NORMAL_SHIP), 0, 0, null);
-                break;
-            case SELECTED:
-                g2d.drawImage(images.get(SELECTED_SHIP), 0, 0, null);
-                break;
-        }
-        g2d.setTransform(original);
-        //g2d.draw(boundingRect);
-        //g2d.fillRect((int)(imageSize.getWidth()), (int)(imageSize.getHeight()), 2, 2);
     }
     
     public boolean checkMousePressed(Point location)

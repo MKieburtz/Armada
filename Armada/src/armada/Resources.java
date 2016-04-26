@@ -54,6 +54,8 @@ public class Resources
         imagePaths.add("Resources/Background.png");
         
         fontData.add(new FontInfo("Resources/Orbitron-Regular.ttf", 12f));
+        fontData.add(new FontInfo("Resources/Orbitron-Regular.ttf", 15f));
+
         
         // load the images
         loadAllResources();
