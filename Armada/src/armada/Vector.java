@@ -63,6 +63,7 @@ public class Vector
     {
         components.x += other.getComponents().x;
         components.y += other.getComponents().y;
+        setDirectionAndMagnitude();
         return this;
     }
 }

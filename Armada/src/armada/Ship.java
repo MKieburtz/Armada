@@ -22,10 +22,10 @@ public class Ship extends GameEntity
     
     private Vector velocityVector;
     private Vector accelerationVector;
-    private final double MAX_VELOCITY = 4;
+    private final double MAX_VELOCITY = 10;
     private final double MAX_ACCELERATION = .1;
     
-    private final double MAX_ANGULAR_VELOCITY = 3;
+    private final double MAX_ANGULAR_VELOCITY = 1;
     private final double MAX_ANGULAR_ACCELERATION = .1;
     
     private double faceAngle;
@@ -122,7 +122,13 @@ public class Ship extends GameEntity
             movingToTarget = false;
         }
         
-        velocityVector = velocityVector.add(accelerationVector);        
+        if (velocityVector.add(accelerationVector).getDirectionAndMagnitude().y > MAX_VELOCITY)
+        {
+            velocityVector.setDirectionAndMagnitude(MAX_VELOCITY, faceAngle);
+            accelerationVector.setDirectionAndMagnitude(0, 0);
+        }
+        
+                
         velocityVector.setDirectionAndMagnitude(velocityVector.getDirectionAndMagnitude().y, faceAngle);
         
         updateState();
@@ -179,7 +185,7 @@ public class Ship extends GameEntity
         movingToTarget = true;
         targetPoint = new Point2D.Double(command.getDestination().x, command.getDestination().y);
         calculcateTargetAngle(targetPoint);
-        velocityVector.setDirectionAndMagnitude(4, faceAngle);
+        accelerationVector.setDirectionAndMagnitude(MAX_ACCELERATION, faceAngle);
     }
     
     private void calculcateTargetAngle(Point2D.Double targetPoint)
