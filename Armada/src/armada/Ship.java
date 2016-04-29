@@ -23,10 +23,10 @@ public class Ship extends GameEntity
     private Vector velocityVector;
     private Vector accelerationVector;
     private final double MAX_VELOCITY = 10;
-    private final double MAX_ACCELERATION = .1;
+    private final double MAX_ACCELERATION = .2;
     
-    private final double MAX_ANGULAR_VELOCITY = 1;
-    private final double MAX_ANGULAR_ACCELERATION = .1;
+    private final double MAX_ANGULAR_VELOCITY = 5;
+    private final double MAX_ANGULAR_ACCELERATION = .2;
     
     private double faceAngle;
     private double angularVelocity;
@@ -93,6 +93,15 @@ public class Ship extends GameEntity
         ACCELERATING_LEFT
     }
     
+    /*
+    Some stuff for movement:
+    The acceleration required to stop the ship's rotation given the distance to stop and and current velocity is:
+    α = (-ω^2)/(2*Δθ) !!!!!
+    where omega is the current velocity and delta theta is the distance to the target angle.
+    
+    How to test: see if the acceleration required at the angle is under the max acceleration
+    */
+    
     public void update()
     {
 //        if (!targetPoint.equals(new Point2D.Double(-1, -1)))
@@ -104,7 +113,15 @@ public class Ship extends GameEntity
             calculcateTargetAngle(targetPoint);
         }
         
-        angularVelocity += angularAcceleration;
+        if (Math.abs(angularVelocity + angularAcceleration) > MAX_ANGULAR_VELOCITY)
+        {
+            angularVelocity = angularVelocity > 0 ? MAX_ANGULAR_VELOCITY : -MAX_ANGULAR_VELOCITY;
+        }
+        else
+        {
+            angularVelocity += angularAcceleration;
+        }
+        
         faceAngle += angularVelocity;
         faceAngle = Calculator.normalizeAngle(faceAngle);
         
@@ -127,9 +144,9 @@ public class Ship extends GameEntity
             velocityVector.setDirectionAndMagnitude(MAX_VELOCITY, faceAngle);
             accelerationVector.setDirectionAndMagnitude(0, 0);
         }
-        
                 
         velocityVector.setDirectionAndMagnitude(velocityVector.getDirectionAndMagnitude().y, faceAngle);
+        accelerationVector.setDirectionAndMagnitude(accelerationVector.getDirectionAndMagnitude().y, faceAngle);
         
         updateState();
         //printStates();
@@ -192,7 +209,7 @@ public class Ship extends GameEntity
     {
         targetAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, targetPoint);
         double[] angleDistances = Calculator.getDistancesBetweenAngles(faceAngle, targetAngle);
-        angularVelocity = angleDistances[0] < angleDistances[1] ? MAX_ANGULAR_VELOCITY : -MAX_ANGULAR_VELOCITY;
+        angularAcceleration = angleDistances[0] < angleDistances[1] ? MAX_ANGULAR_ACCELERATION : -MAX_ANGULAR_ACCELERATION;
     }
 
     private void updateState()
