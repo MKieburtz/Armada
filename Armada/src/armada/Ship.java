@@ -27,7 +27,9 @@ public class Ship extends GameEntity
     
     private final double MAX_ANGULAR_VELOCITY = 5;
     private final double MAX_ANGULAR_ACCELERATION = .2;
-    
+   
+    private double testingRangeForSlowingDown;
+        
     private double faceAngle;
     private double angularVelocity;
     private double angularAcceleration;
@@ -55,12 +57,15 @@ public class Ship extends GameEntity
         centerPoint = new Point2D.Double(location.x + images.get(NORMAL_SHIP).getWidth() / 2, location.y + images.get(NORMAL_SHIP).getHeight() / 2);
         
         selectionState = SelectionState.IDLE;
-        accelerationVector = new Vector(0, faceAngle);
-        faceAngle = 0;
-        velocityVector = new Vector(0, faceAngle);
+        accelerationVector = new Vector(0, 0);
+        faceAngle = 60;
+        velocityVector = new Vector(0, 0);
         
-        angularAcceleration = 0;
-        angularVelocity = 0;
+        angularAcceleration = .2;
+        angularVelocity = -5;
+        
+        testingRangeForSlowingDown = Math.pow(MAX_ANGULAR_VELOCITY, 2) / (2 * MAX_ANGULAR_ACCELERATION);
+        System.out.println(testingRangeForSlowingDown);
     }
     
     
@@ -113,16 +118,25 @@ public class Ship extends GameEntity
             calculcateTargetAngle(targetPoint);
         }
         
-        if (Math.abs(angularVelocity + angularAcceleration) > MAX_ANGULAR_VELOCITY)
+        angularVelocity += angularAcceleration;
+        
+//        if (Math.abs(angularVelocity + angularAcceleration) > MAX_ANGULAR_VELOCITY)
+//        {
+//            angularVelocity = angularVelocity > 0 ? MAX_ANGULAR_VELOCITY : -MAX_ANGULAR_VELOCITY;
+//        }
+//        else
+//        {
+//            angularVelocity += angularAcceleration;
+//        }
+        
+        if (Math.abs(angularVelocity) < .1)
         {
-            angularVelocity = angularVelocity > 0 ? MAX_ANGULAR_VELOCITY : -MAX_ANGULAR_VELOCITY;
-        }
-        else
-        {
-            angularVelocity += angularAcceleration;
+            angularAcceleration = 0;
+            angularVelocity = 0;
         }
         
         faceAngle += angularVelocity;
+
         faceAngle = Calculator.normalizeAngle(faceAngle);
         
         if (rotatingToTarget && Math.abs(faceAngle - targetAngle) <= 2)
