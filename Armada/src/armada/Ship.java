@@ -32,12 +32,13 @@ public class Ship extends GameEntity
         
     private double faceAngle;
     private double angularVelocity;
+    private double targetAngularVelocity;
     private double angularAcceleration;
     
     private boolean rotatingToTarget = false;
     private boolean movingToTarget = false;
     private double targetAngle = 0;
-    private Point2D.Double targetPoint = new Point2D.Double(-1, -1);
+    private Point2D.Double targetPoint = new Point2D.Double(0, 0);
     
     private final FontInfo dataFontInfo = new FontInfo("Resources/Orbitron-Regular.ttf", 15f);
     private final Font dataFont;
@@ -58,11 +59,11 @@ public class Ship extends GameEntity
         
         selectionState = SelectionState.IDLE;
         accelerationVector = new Vector(0, 0);
-        faceAngle = 60;
+        faceAngle = 0;
         velocityVector = new Vector(0, 0);
         
-        angularAcceleration = .2;
-        angularVelocity = -5;
+        angularAcceleration = 0;
+        angularVelocity = 0;
         
         testingRangeForSlowingDown = Math.pow(MAX_ANGULAR_VELOCITY, 2) / (2 * MAX_ANGULAR_ACCELERATION);
         System.out.println(testingRangeForSlowingDown);
@@ -109,13 +110,16 @@ public class Ship extends GameEntity
     
     public void update()
     {
-//        if (!targetPoint.equals(new Point2D.Double(-1, -1)))
-//        {
-//            calculcateTargetAngle(targetPoint);
-//        }
         if (rotatingToTarget)
         {
             calculcateTargetAngle(targetPoint);
+        }
+        
+        if (Calculator.centeredSignum(angularVelocity, targetAngularVelocity) !=
+                Calculator.centeredSignum(angularVelocity + angularAcceleration, targetAngularVelocity))
+        {
+            angularAcceleration = 0;
+            angularVelocity = targetAngularVelocity;
         }
         
         angularVelocity += angularAcceleration;
@@ -128,18 +132,12 @@ public class Ship extends GameEntity
 //        {
 //            angularVelocity += angularAcceleration;
 //        }
-        
-        if (Math.abs(angularVelocity) < .1)
-        {
-            angularAcceleration = 0;
-            angularVelocity = 0;
-        }
-        
+
         faceAngle += angularVelocity;
 
         faceAngle = Calculator.normalizeAngle(faceAngle);
         
-        if (rotatingToTarget && Math.abs(faceAngle - targetAngle) <= 2)
+        if (rotatingToTarget && Calculator.centeredSignum(faceAngle, targetAngle) != Calculator.centeredSignum(faceAngle + angularVelocity, targetAngle))
         {
             angularAcceleration = 0;
             angularVelocity = 0;
@@ -223,7 +221,16 @@ public class Ship extends GameEntity
     {
         targetAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, targetPoint);
         double[] angleDistances = Calculator.getDistancesBetweenAngles(faceAngle, targetAngle);
-        angularAcceleration = angleDistances[0] < angleDistances[1] ? MAX_ANGULAR_ACCELERATION : -MAX_ANGULAR_ACCELERATION;
+        if (angleDistances[0] < angleDistances[1])
+        {
+            angularAcceleration = MAX_ANGULAR_ACCELERATION;
+            targetAngularVelocity = MAX_ANGULAR_VELOCITY;
+        }
+        else
+        {
+            angularAcceleration = -MAX_ANGULAR_ACCELERATION;
+            targetAngularVelocity = -MAX_ANGULAR_VELOCITY;
+        }
     }
 
     private void updateState()

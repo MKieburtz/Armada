@@ -2,6 +2,7 @@ package armada;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import jdk.nashorn.internal.parser.TokenType;
 
 /**
  * @author Michael Kieburtz
@@ -86,5 +87,26 @@ public class Calculator
         }
         
         return new double[] {0.0, 360};
+    }
+    
+    public static int centeredSignum(double n, double center) // default for center is 0 as defined below
+    {
+        if (n > center)
+        {
+            return 1;
+        }
+        else if (n < center)
+        {
+            return -1;
+        }
+        else 
+        {
+            return 0;
+        }
+    }
+    
+    public static int centeredSignum(double n)
+    {
+        return centeredSignum(n, 0);
     }
 }
