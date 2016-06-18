@@ -88,8 +88,8 @@ public class Renderer
     {
         g2d.setColor(Color.RED);
         g2d.setFont(dataFont);
-        g2d.drawString("FPS: " + DrawingData.getFps(), 50, 50);
-        g2d.drawString("UPS: " + DrawingData.getUPS(), 50, 75);
+        g2d.drawString("FPS: " + DrawingData.getFps(), DrawingData.getScreenSize().width - 200, 50);
+        g2d.drawString("UPS: " + DrawingData.getUPS(), DrawingData.getScreenSize().width - 200, 75);
     }
     
     private int initBorderFrame = 0;
