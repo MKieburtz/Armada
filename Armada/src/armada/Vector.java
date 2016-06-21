@@ -59,6 +59,16 @@ public class Vector
         return new Point2D.Double(direction, magnitude);
     }
     
+    public double getDirection()
+    {
+        return getDirectionAndMagnitude().x;
+    }
+    
+    public double getMagnitude()
+    {
+        return getDirectionAndMagnitude().y;
+    }
+    
     public Vector add(Vector other)
     {
         Vector newVector = new Vector(this.getComponents());
