@@ -63,9 +63,10 @@ public class Ship extends GameEntity
         centerPoint = new Point2D.Double(location.x + images.get(NORMAL_SHIP).getWidth() / 2, location.y + images.get(NORMAL_SHIP).getHeight() / 2);
         
         selectionState = SelectionState.IDLE;
-        accelerationVector = new Vector(-MAX_ACCELERATION, 0);
-        velocityVector = new Vector(MAX_VELOCITY, 0);
+        accelerationVector = new Vector(0, 0);
+        velocityVector = new Vector(0, 0);
         
+        // for testing the 'testingrange'
         angularAcceleration = MAX_ANGULAR_ACCELERATION;
         angularVelocity = -MAX_ANGULAR_VELOCITY;
         
@@ -151,11 +152,10 @@ public class Ship extends GameEntity
         {
             angularAcceleration = 0;
             angularVelocity = 0;
-            //rotatingToTarget = false;
         }
         
         //System.out.println(Calculator.getDistance(location, targetPoint));
-        if (movingToTarget && Calculator.getDistance(location, targetPoint) < 30)
+        if (movingToTarget && Calculator.getDistance(centerPoint, targetPoint) < 50)
         {
             velocityVector.setDirectionAndMagnitude(0, 0);
             accelerationVector.setDirectionAndMagnitude(0, 0);
@@ -179,7 +179,10 @@ public class Ship extends GameEntity
         {
             velocityVector.setDirectionAndMagnitude(MAX_VELOCITY, faceAngle);
             accelerationVector.setDirectionAndMagnitude(0, 0);
-        }        
+        }   
+        
+        accelerationVector.setDirectionAndMagnitude(accelerationVector.getMagnitude(), faceAngle);
+        velocityVector.setDirectionAndMagnitude(velocityVector.getMagnitude(), faceAngle);
         
         updateState();
         //printStates();
@@ -221,7 +224,7 @@ public class Ship extends GameEntity
         Point2D.Double p = Calculator.rotatePointAroundPoint(new Point2D.Double(centerPoint.x + 200, centerPoint.y), centerPoint, faceAngle);
         g2d.drawLine((int)centerPoint.x, (int)centerPoint.y, (int)p.x, (int)p.y);
         g2d.setFont(dataFont);
-        g2d.drawString(String.valueOf((int)Calculator.getDistance(location, targetPoint)), (float)location.x - 20, (float)location.y - 20);
+        g2d.drawString(String.valueOf((int)Calculator.getDistance(centerPoint, targetPoint)), (float)location.x - 20, (float)location.y - 20);
         g2d.drawString(String.valueOf(faceAngle) + "\u00b0", (float)location.x + 50, (float)location.y + 50);
         
         
@@ -231,12 +234,14 @@ public class Ship extends GameEntity
     
     public void move(MovementCommand command)
     {
+        // Close distance = move less, rotate more
         rotatingToTarget = true;
         movingToTarget = true;
         targetPoint = new Point2D.Double(command.getDestination().x, command.getDestination().y);
         calculcateTargetAngle(targetPoint);
         //velocityVector.setDirectionAndMagnitude(MAX_VELOCITY, faceAngle);
         accelerationVector.setDirectionAndMagnitude(MAX_ACCELERATION, faceAngle);
+        System.out.println(Calculator.getDistance(targetPoint, centerPoint));
     }
     private void calculcateTargetAngle(Point2D.Double targetPoint)
     {
