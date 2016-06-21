@@ -61,9 +61,10 @@ public class Vector
     
     public Vector add(Vector other)
     {
-        components.x += other.getComponents().x;
-        components.y += other.getComponents().y;
-        setDirectionAndMagnitude();
-        return this;
+        Vector newVector = new Vector(this.getComponents());
+        Point2D.Double newComponents = newVector.getComponents();
+        Point2D.Double otherComponents = other.getComponents();
+        newVector.setComponents(new Point2D.Double(newComponents.x + otherComponents.x, newComponents.y + otherComponents.y));
+        return newVector;
     }
 }

@@ -28,6 +28,7 @@ public class Ship extends GameEntity
     private final double MAX_ANGULAR_VELOCITY = 5;
     private final double MAX_ANGULAR_ACCELERATION = .2;
    
+    private double testingRangeForSlowingDownAngle;
     private double testingRangeForSlowingDown;
         
     private double faceAngle;
@@ -42,6 +43,10 @@ public class Ship extends GameEntity
     
     private final FontInfo dataFontInfo = new FontInfo("Resources/Orbitron-Regular.ttf", 15f);
     private final Font dataFont;
+    
+    //testing variables
+    private Point2D.Double startingLocation;
+    private Point2D.Double endingLocation;
     
     public Ship(Point2D.Double location)
     {
@@ -58,17 +63,20 @@ public class Ship extends GameEntity
         centerPoint = new Point2D.Double(location.x + images.get(NORMAL_SHIP).getWidth() / 2, location.y + images.get(NORMAL_SHIP).getHeight() / 2);
         
         selectionState = SelectionState.IDLE;
-        accelerationVector = new Vector(0, 0);
-        velocityVector = new Vector(0, 0);
+        accelerationVector = new Vector(-MAX_ACCELERATION, 0);
+        velocityVector = new Vector(MAX_VELOCITY, 0);
         
-        angularAcceleration = MAX_ANGULAR_ACCELERATION;
-        angularVelocity = -MAX_ANGULAR_VELOCITY;
+//        angularAcceleration = MAX_ANGULAR_ACCELERATION;
+//        angularVelocity = -MAX_ANGULAR_VELOCITY;
+//        
+//        testingRangeForSlowingDownAngle = Math.pow(angularVelocity, 2) / (2 * angularAcceleration);
+//        System.out.println(testingRangeForSlowingDownAngle);
+//        
+//        faceAngle = testingRangeForSlowingDownAngle - (2.5 * (Math.abs(angularVelocity) / MAX_ANGULAR_VELOCITY));
+//        System.out.println(faceAngle);
+        startingLocation = new Point2D.Double(location.x, location.y);
         
-        testingRangeForSlowingDown = Math.pow(angularVelocity, 2) / (2 * angularAcceleration);
-        System.out.println(testingRangeForSlowingDown);
         
-        faceAngle = testingRangeForSlowingDown - (2.5 * (Math.abs(angularVelocity) / MAX_ANGULAR_VELOCITY));
-        System.out.println(faceAngle);
     }
     
     
@@ -108,6 +116,8 @@ public class Ship extends GameEntity
     where omega is the current velocity and delta theta is the distance to the target angle.
     
     How to test: see if the acceleration required at the angle is under the max acceleration
+    
+    This also works for linear velocity!!
     */
     
     public void update()
@@ -137,6 +147,7 @@ public class Ship extends GameEntity
             //rotatingToTarget = false;
         }
         
+        //System.out.println(Calculator.getDistance(location, targetPoint));
         if (movingToTarget && Calculator.getDistance(location, targetPoint) < 30)
         {
             velocityVector.setDirectionAndMagnitude(0, 0);
@@ -147,14 +158,21 @@ public class Ship extends GameEntity
             angularVelocity = 0;
         }
         
-        if (velocityVector.add(accelerationVector).getDirectionAndMagnitude().y > MAX_VELOCITY)
+        velocityVector = velocityVector.add(accelerationVector);     
+                
+        if (velocityVector.getDirectionAndMagnitude().y < .01)
+        {
+            velocityVector.setDirectionAndMagnitude(0, 0);
+            accelerationVector.setDirectionAndMagnitude(0, 0);
+            endingLocation = location;
+            System.out.println("Distance: " + Calculator.getDistance(startingLocation, endingLocation));
+        }
+        
+        if (velocityVector.getDirectionAndMagnitude().y > MAX_VELOCITY)
         {
             velocityVector.setDirectionAndMagnitude(MAX_VELOCITY, faceAngle);
             accelerationVector.setDirectionAndMagnitude(0, 0);
-        }
-                
-        velocityVector.setDirectionAndMagnitude(velocityVector.getDirectionAndMagnitude().y, faceAngle);
-        accelerationVector.setDirectionAndMagnitude(accelerationVector.getDirectionAndMagnitude().y, faceAngle);
+        }        
         
         updateState();
         //printStates();
@@ -213,20 +231,19 @@ public class Ship extends GameEntity
         //velocityVector.setDirectionAndMagnitude(MAX_VELOCITY, faceAngle);
         accelerationVector.setDirectionAndMagnitude(MAX_ACCELERATION, faceAngle);
     }
-    
     private void calculcateTargetAngle(Point2D.Double targetPoint)
     {
         targetAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, targetPoint);
         double[] angleDistances = Calculator.getDistancesBetweenAngles(faceAngle, targetAngle);
         if (angleDistances[0] < angleDistances[1])
         {
-            System.out.println(angleDistances[0]);
+            //System.out.println(angleDistances[0]);
             angularAcceleration = MAX_ANGULAR_ACCELERATION;
             targetAngularVelocity = MAX_ANGULAR_VELOCITY;
         }
         else
         {
-            System.out.println(angleDistances[1]);
+            //System.out.println(angleDistances[1]);
             angularAcceleration = -MAX_ANGULAR_ACCELERATION;
             targetAngularVelocity = -MAX_ANGULAR_VELOCITY;
         }
