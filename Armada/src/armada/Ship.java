@@ -21,6 +21,7 @@ public class Ship extends GameEntity
     private final Point2D.Double centerPoint;
     
     private Vector velocityVector;
+    private double targetVelocityMagnitude;
     private Vector accelerationVector;
     private final double MAX_VELOCITY = 10;
     private final double MAX_ACCELERATION = .2;
@@ -155,7 +156,7 @@ public class Ship extends GameEntity
         }
         
         //System.out.println(Calculator.getDistance(location, targetPoint));
-        if (movingToTarget && Calculator.getDistance(centerPoint, targetPoint) < 50)
+        if (movingToTarget && Calculator.getDistance(centerPoint, targetPoint) < 30)
         {
             velocityVector.setDirectionAndMagnitude(0, 0);
             accelerationVector.setDirectionAndMagnitude(0, 0);
@@ -175,11 +176,11 @@ public class Ship extends GameEntity
             //System.out.println("Distance: " + Calculator.getDistance(startingLocation, endingLocation));
         }
         
-        if (velocityVector.getMagnitude() > MAX_VELOCITY)
+        if (velocityVector.getMagnitude() > targetVelocityMagnitude)
         {
-            velocityVector.setDirectionAndMagnitude(MAX_VELOCITY, faceAngle);
+            velocityVector.setDirectionAndMagnitude(targetVelocityMagnitude, faceAngle);
             accelerationVector.setDirectionAndMagnitude(0, 0);
-        }   
+        }
         
         accelerationVector.setDirectionAndMagnitude(accelerationVector.getMagnitude(), faceAngle);
         velocityVector.setDirectionAndMagnitude(velocityVector.getMagnitude(), faceAngle);
@@ -238,26 +239,45 @@ public class Ship extends GameEntity
         rotatingToTarget = true;
         movingToTarget = true;
         targetPoint = new Point2D.Double(command.getDestination().x, command.getDestination().y);
-        calculcateTargetAngle(targetPoint);
-        //velocityVector.setDirectionAndMagnitude(MAX_VELOCITY, faceAngle);
-        accelerationVector.setDirectionAndMagnitude(MAX_ACCELERATION, faceAngle);
-        System.out.println(Calculator.getDistance(targetPoint, centerPoint));
+        double angleDistance = calculcateTargetAngle(targetPoint);
+        double linearDistance = Calculator.getDistance(targetPoint, centerPoint);
+        
+        // frist decide if the turn is a short distance
+        boolean smallDistance = linearDistance < 130;
+        
+        if (smallDistance)
+        {
+            accelerationVector.setDirectionAndMagnitude(MAX_ACCELERATION / 2, faceAngle);
+            targetVelocityMagnitude = MAX_VELOCITY / 4;
+        }
+        else 
+        {
+            accelerationVector.setDirectionAndMagnitude(MAX_ACCELERATION, faceAngle);
+            targetVelocityMagnitude = MAX_VELOCITY;
+        }
+        
+        System.out.println("angle: " + angleDistance);
+        System.out.println("distance: " + linearDistance + "\n");
     }
-    private void calculcateTargetAngle(Point2D.Double targetPoint)
+    
+    // returns the distance to the target angleooo
+    private double calculcateTargetAngle(Point2D.Double targetPoint)
     {
         targetAngle = Calculator.getAngleBetweenTwoPoints(centerPoint, targetPoint);
         double[] angleDistances = Calculator.getDistancesBetweenAngles(faceAngle, targetAngle);
         if (angleDistances[0] < angleDistances[1])
         {
-            //System.out.println(angleDistances[0]);
+//            System.out.println(angleDistances[0]);
             angularAcceleration = MAX_ANGULAR_ACCELERATION;
             targetAngularVelocity = MAX_ANGULAR_VELOCITY;
+            return angleDistances[0];
         }
         else
         {
             //System.out.println(angleDistances[1]);
             angularAcceleration = -MAX_ANGULAR_ACCELERATION;
             targetAngularVelocity = -MAX_ANGULAR_VELOCITY;
+            return angleDistances[1];
         }
     }
 
