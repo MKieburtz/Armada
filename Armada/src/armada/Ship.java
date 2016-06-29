@@ -39,6 +39,7 @@ public class Ship extends GameEntity
     
     private boolean rotatingToTarget = false;
     private boolean movingToTarget = false;
+    private boolean locked = false;
     private double targetAngle = 0;
     private Point2D.Double targetPoint = new Point2D.Double(0, 0);
     
@@ -149,8 +150,14 @@ public class Ship extends GameEntity
 
         faceAngle = Calculator.normalizeAngle(faceAngle);
         
+        accelerationVector.setDirectionAndMagnitude(accelerationVector.getMagnitude(), faceAngle);
+        velocityVector.setDirectionAndMagnitude(velocityVector.getMagnitude(), faceAngle);
+        
         if (rotatingToTarget && Calculator.centeredSignum(faceAngle, targetAngle) != Calculator.centeredSignum(faceAngle + angularVelocity, targetAngle))
         {
+            faceAngle = targetAngle;
+            locked = true;
+            System.out.println("locked");
             angularAcceleration = 0;
             angularVelocity = 0;
         }
@@ -162,13 +169,58 @@ public class Ship extends GameEntity
             accelerationVector.setDirectionAndMagnitude(0, 0);
             movingToTarget = false;
             rotatingToTarget = false;
+            locked = false;
             angularAcceleration = 0;
             angularVelocity = 0;
         }
         
-        velocityVector = velocityVector.add(accelerationVector);     
+        if (!locked)
+        {            
+            if (velocityVector.getMagnitude() < targetVelocityMagnitude) // if we need to speed up
+            {                
+                if (velocityVector.add(accelerationVector).getMagnitude() > targetVelocityMagnitude)
+                {
+                    velocityVector.setDirectionAndMagnitude(targetVelocityMagnitude, faceAngle);
+                    accelerationVector.setDirectionAndMagnitude(0, 0);
+                }
+                else
+                {
+                    velocityVector = velocityVector.add(accelerationVector);
+                }
+            }
+            else if (velocityVector.getMagnitude() > targetVelocityMagnitude) // if we need to slow down
+            {
+                if (velocityVector.add(accelerationVector).getMagnitude() < targetVelocityMagnitude)
+                {
+                    velocityVector.setDirectionAndMagnitude(targetVelocityMagnitude, faceAngle);
+                    accelerationVector.setDirectionAndMagnitude(0, 0);
+                }
+                else
+                {
+                    velocityVector = velocityVector.add(accelerationVector);
+                }
+            }
+        }
+        else
+        {
+            if (velocityVector.getMagnitude() < MAX_VELOCITY) // only gets called once, when the ship becomes locked
+            {
+                accelerationVector.setDirectionAndMagnitude(MAX_ACCELERATION, faceAngle);
+                targetVelocityMagnitude = MAX_VELOCITY;
+            }
+            
+            if (velocityVector.add(accelerationVector).getMagnitude() > targetVelocityMagnitude)
+            {
+                velocityVector.setDirectionAndMagnitude(targetVelocityMagnitude, faceAngle);
+                accelerationVector.setDirectionAndMagnitude(0, 0);
+            }
+            else
+            {
+                velocityVector = velocityVector.add(accelerationVector);
+            }
+        }
                 
-        if (velocityVector.getMagnitude() < .01)
+        if (velocityVector.getMagnitude() < .01 && targetVelocityMagnitude == 0) // make sure the velocity doesnt become negative from slowing down
         {
             velocityVector.setDirectionAndMagnitude(0, 0);
             accelerationVector.setDirectionAndMagnitude(0, 0);
@@ -176,14 +228,13 @@ public class Ship extends GameEntity
             //System.out.println("Distance: " + Calculator.getDistance(startingLocation, endingLocation));
         }
         
-        if (velocityVector.getMagnitude() > targetVelocityMagnitude)
+        if (velocityVector.getMagnitude() > MAX_VELOCITY)
         {
-            velocityVector.setDirectionAndMagnitude(targetVelocityMagnitude, faceAngle);
+            velocityVector.setDirectionAndMagnitude(MAX_VELOCITY, faceAngle);
             accelerationVector.setDirectionAndMagnitude(0, 0);
         }
         
-        accelerationVector.setDirectionAndMagnitude(accelerationVector.getMagnitude(), faceAngle);
-        velocityVector.setDirectionAndMagnitude(velocityVector.getMagnitude(), faceAngle);
+        
         
         updateState();
         //printStates();
@@ -238,22 +289,52 @@ public class Ship extends GameEntity
         // Close distance = move less, rotate more
         rotatingToTarget = true;
         movingToTarget = true;
+        locked = false;
         targetPoint = new Point2D.Double(command.getDestination().x, command.getDestination().y);
         double angleDistance = calculcateTargetAngle(targetPoint);
         double linearDistance = Calculator.getDistance(targetPoint, centerPoint);
         
         // frist decide if the turn is a short distance
-        boolean smallDistance = linearDistance < 130;
+        boolean smallDistance = false;
         
-        if (smallDistance)
+        if (!moving())
         {
-            accelerationVector.setDirectionAndMagnitude(MAX_ACCELERATION / 2, faceAngle);
-            targetVelocityMagnitude = MAX_VELOCITY / 4;
+            smallDistance = linearDistance < 130;
+            if (smallDistance)
+            {
+                accelerationVector.setDirectionAndMagnitude(MAX_ACCELERATION / 2, faceAngle);
+                targetVelocityMagnitude = MAX_VELOCITY / 4;
+            }
+            else 
+            {
+                accelerationVector.setDirectionAndMagnitude(MAX_ACCELERATION, faceAngle);
+                targetVelocityMagnitude = MAX_VELOCITY;
+            }
         }
-        else 
+        else
         {
-            accelerationVector.setDirectionAndMagnitude(MAX_ACCELERATION, faceAngle);
-            targetVelocityMagnitude = MAX_VELOCITY;
+            smallDistance = linearDistance < 200;
+            if (smallDistance)
+            {
+                if (velocityVector.getMagnitude() > MAX_VELOCITY / 4)
+                {
+                    accelerationVector.setDirectionAndMagnitude(-MAX_ACCELERATION, faceAngle);
+                    targetVelocityMagnitude = MAX_VELOCITY / 4;
+                }
+                else 
+                {
+                    accelerationVector.setDirectionAndMagnitude(MAX_ACCELERATION / 2, faceAngle);
+                    targetVelocityMagnitude = MAX_VELOCITY / 4;
+                }
+            }
+            else
+            {
+                if (velocityVector.getMagnitude() < MAX_VELOCITY)
+                {
+                    accelerationVector.setDirectionAndMagnitude(MAX_ACCELERATION, faceAngle);
+                    targetVelocityMagnitude = MAX_VELOCITY;
+                }
+            }
         }
         
         System.out.println("angle: " + angleDistance);
@@ -279,6 +360,11 @@ public class Ship extends GameEntity
             targetAngularVelocity = -MAX_ANGULAR_VELOCITY;
             return angleDistances[1];
         }
+    }
+    
+    private boolean moving()
+    {
+        return velocityVector.getMagnitude() != 0;
     }
 
     private void updateState()
