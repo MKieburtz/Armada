@@ -77,4 +77,14 @@ public class Vector
         newVector.setComponents(new Point2D.Double(newComponents.x + otherComponents.x, newComponents.y + otherComponents.y));
         return newVector;
     }
+    
+    public double dot(Vector other)
+    {
+        return this.components.x * other.getComponents().x + this.components.y * other.getComponents().y;
+    }
+    
+    public double angleBetween(Vector other)
+    {
+        return Math.acos(dot(other) / (magnitude * other.getMagnitude())) * 180 / Math.PI;
+    }
 }

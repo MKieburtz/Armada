@@ -23,6 +23,7 @@ public class Ship extends GameEntity
     private Vector velocityVector;
     private double targetVelocityMagnitude;
     private Vector accelerationVector;
+    private Vector targetVector = new Vector(0, 0);
     private final double MAX_VELOCITY = 10;
     private final double MAX_ACCELERATION = .2;
     
@@ -152,7 +153,7 @@ public class Ship extends GameEntity
         
         accelerationVector.setDirectionAndMagnitude(accelerationVector.getMagnitude(), faceAngle);
         velocityVector.setDirectionAndMagnitude(velocityVector.getMagnitude(), faceAngle);
-        
+        targetVector = new Vector(new Point2D.Double(targetPoint.x - centerPoint.x, targetPoint.y - centerPoint.y));
         if (rotatingToTarget && Calculator.centeredSignum(faceAngle, targetAngle) != Calculator.centeredSignum(faceAngle + angularVelocity, targetAngle))
         {
             faceAngle = targetAngle;
@@ -277,6 +278,7 @@ public class Ship extends GameEntity
         g2d.drawLine((int)centerPoint.x, (int)centerPoint.y, (int)p.x, (int)p.y);
         g2d.setFont(dataFont);
         g2d.drawString(String.valueOf((int)Calculator.getDistance(centerPoint, targetPoint)), (float)location.x - 20, (float)location.y - 20);
+        //g2d.drawString(String.valueOf(targetVector.angleBetween(velocityVector)), 100, 100);
         g2d.drawString(String.valueOf(faceAngle) + "\u00b0", (float)location.x + 50, (float)location.y + 50);
         
         
